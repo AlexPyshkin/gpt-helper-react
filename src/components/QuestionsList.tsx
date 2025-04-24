@@ -1,9 +1,16 @@
-import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_QUESTIONS_BY_CATEGORY } from '../graphql/queries'; // Предполагается, что у вас есть этот запрос
-import { List, ListItem, ListItemText, CircularProgress, Typography, Box } from '@mui/material';
+import { List, ListItem, ListItemText, CircularProgress, Typography, Box, ListItemButton } from '@mui/material';
+import { Answer, AppState, Question } from '../types';
+import type { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../graphql/types';
 
-export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQuestion }) => {
+type QuestionsListProps = {
+  currentState: AppState;
+  onSelectQuestion: (newState: Question) => void;
+  setAnswerForQuestion: (answer: Answer | null) => void;
+};
+
+export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQuestion } : QuestionsListProps) => {
   // If category is null, return a message or nothing
   if (!currentState.category) {
     return (
@@ -27,12 +34,13 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
     );
   }
 
-  const { loading, error, data } = useQuery(GET_QUESTIONS_BY_CATEGORY, {
+  const { loading, error, data } = useQuery< GetQuestionsByCategoryQuery,
+  GetQuestionsByCategoryQueryVariables >(GET_QUESTIONS_BY_CATEGORY, {
     variables: { categoryId: currentState.category.id },
     fetchPolicy: 'network-only', // Disable caching
   });
 
-  const handleQuestionClick = async (question) => {
+  const handleQuestionClick = async (question: Question) => {
     currentState.question = question;
     onSelectQuestion(question);
 
@@ -59,10 +67,10 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
     }
 
     const result = await response.json();
-    if (result.data && result.data.answer) {
+    if (result.data!.answer) {
       setAnswerForQuestion(result.data.answer);
     } else {
-      setAnswerForQuestion('');
+      setAnswerForQuestion(null);
       console.error("Ответ не найден в результате:", result);
     }
   };
@@ -90,18 +98,28 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
       }}
     >
       <List sx={{ overflowY: 'auto', maxHeight: '100%' }}>
-        {data.questions.map((question) => (
-          <ListItem
-            button
-            key={question.id}
-            onClick={() => handleQuestionClick(question)}
-            selected={currentState.question && currentState.question.id === question.id}
+        {data!.questions.map((question) => (
+          <ListItem disablePadding key={question.id}>
+            <ListItemButton onClick={() => handleQuestionClick(question)}
+            selected={currentState.question?.id === question.id}
             sx={{
               backgroundColor: currentState.question && currentState.question.id === question.id ? 'lightblue' : 'inherit',
-            }}
-          >
-            <ListItemText primary={question.questionText} />
-          </ListItem>
+            }} >
+              <ListItemText primary={question.questionText} />
+            </ListItemButton>
+            </ListItem>
+
+          // <ListItem
+          //   button
+          //   key={question.id}
+          //   onClick={() => handleQuestionClick(question)}
+          //   selected={currentState.question && currentState.question.id === question.id}
+          //   sx={{
+          //     backgroundColor: currentState.question && currentState.question.id === question.id ? 'lightblue' : 'inherit',
+          //   }}
+          // >
+          //   <ListItemText primary={question.questionText} />
+          // </ListItem>
         ))}
       </List>
     </Box>

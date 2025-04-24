@@ -1,0 +1,15 @@
+#version: '3.9'
+
+services:
+  app:
+    image: "${DOCKER_REPO}:latest"
+    container_name: "${APP_NAME}"
+    restart: on-failure
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+#    volumes:
+#      - ./config/application.yaml:/config/application.yaml
+#    environment:
+#      SPRING_CONFIG_LOCATION: "file:/config/application.yaml"
+    env_file:
+      - .env  # Подтягиваем переменные среды из .env

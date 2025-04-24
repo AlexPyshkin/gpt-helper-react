@@ -5,8 +5,10 @@ import UndoIcon from '@mui/icons-material/Undo';
 import CheckIcon from '@mui/icons-material/Check';
 import {useMutation} from '@apollo/client';
 import {UPDATE_ANSWER} from '../graphql/queries';
+import type { AppState } from '../types';
+import type { ChangeEvent } from 'react';
 
-export const AnswerDetail = ({ currentState }) => {
+export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
   const [answerText, setAnswerText] = useState('');
   const [updateAnswer] = useMutation(UPDATE_ANSWER);
   const [isChanged, setIsChanged] = useState(false);
@@ -20,15 +22,15 @@ export const AnswerDetail = ({ currentState }) => {
     }
   }, [currentState.answer]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setAnswerText(event.target.value);
-    setIsChanged(event.target.value !== currentState.answer.answerText);
+    setIsChanged(event.target.value !== currentState.answer!.answerText);
   };
 
   const handleSave = async () => {
     console.log('Answer saved:', answerText);
     try {
-      let response = await updateAnswer({ variables: { answerId: currentState.answer.id, answerText: answerText } });
+      let response = await updateAnswer({ variables: { answerId: currentState.answer!.id, answerText: answerText } });
       currentState.answer = response.data.updateAnswer;
       console.log(currentState);
       setIsChanged(false);
@@ -38,7 +40,7 @@ export const AnswerDetail = ({ currentState }) => {
   };
 
   const handleCancel = () => {
-    setAnswerText(currentState.answer.answerText);
+    setAnswerText(currentState.answer!.answerText);
     setIsChanged(false);
   };
 

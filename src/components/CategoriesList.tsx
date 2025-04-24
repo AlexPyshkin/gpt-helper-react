@@ -1,8 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { GET_CATEGORIES } from '../graphql/queries';
-import { List, ListItem, ListItemText, CircularProgress, Typography } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemText, CircularProgress, Typography} from '@mui/material';
+import { AppState, Category } from '../types';
 
-export const CategoriesList = ({ onSelectCategory, currentState }) => {
+type CategoriesListProps = {
+  onSelectCategory: (category: Category) => void;
+  currentState: AppState;
+};
+
+export const CategoriesList = ({ onSelectCategory, currentState } : CategoriesListProps) => {
   const { loading, error, data } = useQuery(GET_CATEGORIES);
 
   if (loading) return <CircularProgress />;
@@ -10,19 +16,20 @@ export const CategoriesList = ({ onSelectCategory, currentState }) => {
 
   return (
     <List>
-      {data.categories.map((category) => (
-        <ListItem 
-          button 
-          key={category.id} 
-          onClick={() => onSelectCategory(category)}
-          selected={currentState.category && currentState.category.id === category.id}
-          sx={{
-            backgroundColor: currentState.category && currentState.category.id === category.id ? 'lightblue' : 'inherit',
-          }}
-        >
-          <ListItemText primary={category.name} />
-        </ListItem>
-      ))}
-    </List>
+  {data.categories.map((category: Category) => (
+    <ListItem disablePadding key={category.id}>
+      <ListItemButton
+        onClick={() => onSelectCategory(category)}
+        selected={currentState.category?.id === category.id}
+        sx={{
+          backgroundColor:
+            currentState.category?.id === category.id ? 'lightblue' : 'inherit',
+        }}
+      >
+        <ListItemText primary={category.name} />
+      </ListItemButton>
+    </ListItem>
+  ))}
+</List>
   );
 }; 
