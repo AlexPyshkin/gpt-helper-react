@@ -1,0 +1,52 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height of the viewport */
+}
+
+.content {
+  display: flex;
+  flex: 1; /* Take up remaining space */
+  overflow: hidden; /* Prevent overflow from affecting the footer */
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  width: 20%; /* 20% width for categories */
+  height: 100%; /* Full height for categories */
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  width: 80%; /* 80% width for questions and answers */
+  height: 100%; /* Full height for questions */
+}
+
+.questions-list {
+  flex: 1; /* Allow questions list to take available space */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.question-detail {
+  height: 30%; /* Fixed height for QuestionDetail */
+}
+
+.answer-detail {
+  height: 70%; /* Fixed height for AnswerDetail */
+}
+
+.footer {
+  position: fixed; /* Fix the footer to the bottom */
+  bottom: 0; /* Align to the bottom */
+  left: 0; /* Align to the left */
+  right: 0; /* Align to the right */
+  background-color: #f8f8f8; /* Background color for visibility */
+  padding: 20px; /* Padding for the footer */
+  text-align: center; /* Center text */
+}
+
+.right > div {
+  flex: 1; /* Allow questions and answers to take equal height */
+} 
