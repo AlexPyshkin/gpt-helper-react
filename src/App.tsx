@@ -49,7 +49,7 @@ export const App = () => {
     <div className="app-container" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Header />
       <div className="content" style={{ display: 'flex', flex: 1 }}>
-        <div className="left" style={{ width: '20%', padding: '16px' }}>
+        <div className="left" style={{ width: '30%', padding: '6px 0px' }}>
           <CategoriesList 
             onSelectCategory={handleCategorySelect} 
             currentState={state}
@@ -60,7 +60,7 @@ export const App = () => {
             setAnswerLoadingState={setLoadingAnswer}
           />
         </div>
-        <div className="right" style={{ width: '80%', padding: '16px' }}>
+        <div className="right" style={{ width: '80%', padding: '6px 0px' }}>
           <QuestionsList 
             currentState={state} 
             onSelectQuestion={handleQuestionSelect}

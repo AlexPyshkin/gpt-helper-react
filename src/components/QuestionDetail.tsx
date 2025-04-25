@@ -94,17 +94,17 @@ export const QuestionDetail = ({
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        padding: "16px",
-        margin: "16px",
-        backgroundColor: "#f9f9f9",
-        height: "80vh", // Set height to 80% of viewport height
-        overflow: "auto",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        padding: '6px',
+        margin: '6px',
+        backgroundColor: '#f9f9f9',
+        height: '80%',
+        overflow: 'auto',
       }}
     >
       <TextareaAutosize
@@ -117,10 +117,10 @@ export const QuestionDetail = ({
         value={questionText}
         onChange={handleInputChange}
         style={{
-          width: "100%",
+          width: "96%",
           border: "1px solid #ccc",
           borderRadius: "4px",
-          padding: "8px",
+          padding: "6px",
           marginBottom: "16px",
           resize: "none", // Prevent manual resizing
         }}

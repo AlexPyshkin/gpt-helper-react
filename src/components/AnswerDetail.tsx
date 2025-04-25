@@ -55,8 +55,8 @@ export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
         alignItems: 'center',
         border: '1px solid #ccc',
         borderRadius: '8px',
-        padding: '16px',
-        margin: '16px',
+        padding: '6px',
+        margin: '6px',
         backgroundColor: '#f9f9f9',
         height: '80%',
         overflow: 'auto',
@@ -74,7 +74,7 @@ export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
               width: '100%', 
               border: '1px solid #ccc', 
               borderRadius: '4px', 
-              padding: '8px', 
+              padding: '6px 0px',
               marginBottom: '16px',
               resize: 'none'
             }}
