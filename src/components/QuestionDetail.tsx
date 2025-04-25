@@ -1,20 +1,12 @@
 import { Box, IconButton } from "@mui/material";
 import TextareaAutosize from "react-textarea-autosize";
 import { useState, useEffect, ChangeEvent } from "react";
-import { GraphQLClient } from "graphql-request";
+import { useMutation } from '@apollo/client';
 import { CREATE_QUESTION, UPDATE_QUESTION } from "../graphql/queries";
 import AddIcon from "@mui/icons-material/Add";
 import UndoIcon from "@mui/icons-material/Undo";
 import CheckIcon from "@mui/icons-material/Check";
 import { AppState } from "../types";
-import type {
-  UpdateQuestionMutation,
-  UpdateQuestionMutationVariables,
-  CreateQuestionMutation,
-  CreateQuestionMutationVariables,
-} from "../graphql/types";
-
-const client = new GraphQLClient("/graphql"); // Replace with your backend URL
 
 type CategoriesListProps = {
   currentState: AppState;
@@ -26,6 +18,8 @@ export const QuestionDetail = ({
   refetchQuestions,
   setAnswerLoadingState,
 }: CategoriesListProps) => {
+  const [createQuestion] = useMutation(CREATE_QUESTION);
+  const [updateQuestion] = useMutation(UPDATE_QUESTION);
   const [questionText, setQuestionText] = useState("");
 
   useEffect(() => {
@@ -47,26 +41,22 @@ export const QuestionDetail = ({
       let result;
       if (currentState.question) {
         // Update existing question
-        const variables = {
-          id: currentState.question.id,
-          questionText: questionText,
-        };
-        response = await client.request<
-          UpdateQuestionMutation,
-          UpdateQuestionMutationVariables
-        >(UPDATE_QUESTION, variables);
-        result = response.updateQuestion;
+        response = await updateQuestion({
+          variables: {
+            id: currentState.question.id,
+            questionText: questionText,
+          }
+        });
+        result = response.data.updateQuestion;
       } else {
         // Create new question
-        const variables = {
-          questionText: questionText,
-          categoryId: currentState.category!.id,
-        };
-        response = await client.request<
-          CreateQuestionMutation,
-          CreateQuestionMutationVariables
-        >(CREATE_QUESTION, variables);
-        result = response.createQuestion;
+        response = await createQuestion({
+          variables: {
+            questionText: questionText,
+            categoryId: currentState.category!.id,
+          }
+        });
+        result = response.data.createQuestion;
       }
       // Refetch questions after creating/updating
       console.log(response);

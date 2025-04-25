@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/graphql': {
-        target: 'http://gpt-helper-java:9094',
+        target: 'http://localhost:9094',
         changeOrigin: true
       }
     }
