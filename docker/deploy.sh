@@ -26,6 +26,7 @@ cd "$SCRIPT_DIR" || exit 1
 
 # Запускаем docker-compose
 echo "Запускаем docker-compose..."
+docker-compose pull
 docker-compose up -d
 
 if [ $? -eq 0 ]; then
