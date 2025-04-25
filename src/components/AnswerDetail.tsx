@@ -7,11 +7,15 @@ import {useMutation} from '@apollo/client';
 import {UPDATE_ANSWER} from '../graphql/queries';
 import type { AppState } from '../types';
 import type { ChangeEvent } from 'react';
+import ReactMarkdown from 'react-markdown';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
   const [answerText, setAnswerText] = useState('');
   const [updateAnswer] = useMutation(UPDATE_ANSWER);
   const [isChanged, setIsChanged] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     if (currentState.answer) {
@@ -47,7 +51,7 @@ export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
   const isDisabled = !currentState.answer || !isChanged;
 
   return (
-    <Box 
+    <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -66,26 +70,47 @@ export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
         <CircularProgress />
       ) : (
         <>
-          <TextareaAutosize 
-            minRows={30}
-            value={answerText} 
-            onChange={handleInputChange} 
-            style={{ 
-              width: '100%', 
-              border: '1px solid #ccc', 
-              borderRadius: '4px', 
-              padding: '6px 0px',
-              marginBottom: '16px',
-              resize: 'none'
-            }}
-          />
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-            <IconButton onClick={handleCancel} color="primary" disabled={isDisabled}>
-              <UndoIcon />
-            </IconButton>
-            <IconButton onClick={handleSave} color="primary" disabled={isDisabled}>
-              <CheckIcon />
-            </IconButton>
+          {editMode ? (
+            <TextareaAutosize
+              minRows={30}
+              value={answerText}
+              onChange={handleInputChange}
+              style={{
+                width: '100%',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                padding: '6px 0px',
+                marginBottom: '16px',
+                resize: 'none'
+              }}
+            />
+          ) : (
+            <div className="markdown-body" style={{ width: '99%' }}>
+              <ReactMarkdown>
+                {answerText}
+              </ReactMarkdown>
+            </div>
+          )}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '99%' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editMode}
+                  onChange={(_, checked) => setEditMode(checked)}
+                  color="primary"
+                />
+              }
+              label="Edit mode"
+              sx={{ marginRight: 2, alignItems: "center"}}
+            />
+            <Box>
+              <IconButton onClick={handleCancel} color="primary" disabled={isDisabled}>
+                <UndoIcon />
+              </IconButton>
+              <IconButton onClick={handleSave} color="primary" disabled={isDisabled}>
+                <CheckIcon />
+              </IconButton>
+            </Box>
           </Box>
         </>
       )}

@@ -49,4 +49,14 @@
 
 .right > div {
   flex: 1; /* Allow questions and answers to take equal height */
-} 
+}
+
+.markdown-body {
+  width: 99%;
+  height: 99%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 3px;
+  margin-bottom: 16px;
+  background: #fff;
+}
