@@ -24,6 +24,7 @@ echo "Начинаем сборку фронтенд приложения '$APP_
 
 # Устанавливаем зависимости и билдим фронтенд
 cd "$PROJECT_PATH"
+echo "$PROJECT_PATH"
 pnpm install
 pnpm run build
 

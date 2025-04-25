@@ -5,10 +5,9 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173,
     proxy: {
       '/graphql': {
-        target: 'http://localhost:9094',
+        target: 'http://gpt-helper-java:9094',
         changeOrigin: true
       }
     }

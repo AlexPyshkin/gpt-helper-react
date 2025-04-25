@@ -14,7 +14,7 @@ import type {
   CreateQuestionMutationVariables,
 } from "../graphql/types";
 
-const client = new GraphQLClient("http://localhost:9094/graphql"); // Replace with your backend URL
+const client = new GraphQLClient("/graphql"); // Replace with your backend URL
 
 type CategoriesListProps = {
   currentState: AppState;

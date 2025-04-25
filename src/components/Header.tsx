@@ -1,5 +1,6 @@
 import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
 import { AccountCircle, Login } from '@mui/icons-material';
+import reactLogo from '/src/assets/react.svg';
 
 export const Header = () => {
   return (
@@ -8,7 +9,7 @@ export const Header = () => {
         {/* Logo and Title */}
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
           <img 
-            src="/src/assets/react.svg" 
+            src={reactLogo}
             alt="Logo" 
             style={{ height: '40px', marginRight: '16px' }} 
           />

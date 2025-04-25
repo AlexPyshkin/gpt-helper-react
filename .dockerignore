@@ -1,7 +1,6 @@
 node_modules
-dist
 .git
 .gitignore
-Dockerfile
-docker-compose.yml
+docker/Dockerfile
+docker/docker-compose.yml
 *.log

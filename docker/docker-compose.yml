@@ -1,15 +1,24 @@
 #version: '3.9'
 
 services:
-  app:
+  gpt-helper-web:
     image: "${DOCKER_REPO}:latest"
     container_name: "${APP_NAME}"
     restart: on-failure
+#    ports:
+#      - "${APP_PORT}:${APP_PORT}"
     ports:
-      - "${APP_PORT}:${APP_PORT}"
-#    volumes:
+      - "5173:80"
+
+    #    volumes:
 #      - ./config/application.yaml:/config/application.yaml
 #    environment:
 #      SPRING_CONFIG_LOCATION: "file:/config/application.yaml"
     env_file:
       - .env  # Подтягиваем переменные среды из .env
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true
