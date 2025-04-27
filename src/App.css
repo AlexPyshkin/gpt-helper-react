@@ -59,4 +59,5 @@
   padding: 6px 3px;
   margin-bottom: 16px;
   background: #fff;
+  overflow: auto;
 }
