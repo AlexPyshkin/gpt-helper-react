@@ -1,6 +1,17 @@
+// src/components/QuestionsList.tsx
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_QUESTIONS_BY_CATEGORY } from '../graphql/queries'; // Предполагается, что у вас есть этот запрос
-import { List, ListItem, ListItemText, CircularProgress, Typography, Box, ListItemButton } from '@mui/material';
+import { GET_QUESTIONS_BY_CATEGORY } from '../graphql/queries';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  Typography,
+  Box,
+  ListItemButton,
+  TextField,
+} from '@mui/material';
 import { Answer, AppState, Question } from '../types';
 import type { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../graphql/types';
 
@@ -10,46 +21,26 @@ type QuestionsListProps = {
   setAnswerForQuestion: (answer: Answer | null) => void;
 };
 
-export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQuestion } : QuestionsListProps) => {
-  // If category is null, return a message or nothing
-  if (!currentState.category) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          padding: '6px',
-          margin: '6px',
-          backgroundColor: '#f9f9f9',
-          height: '80%',
-          overflow: 'auto',
-        }}
-      >
-        <Typography variant="h6" align="center">Пожалуйста, выберите категорию для отображения вопросов.</Typography>
-      </Box>
-    );
-  }
+export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQuestion }: QuestionsListProps) => {
 
-  const { loading, error, data } = useQuery< GetQuestionsByCategoryQuery,
-  GetQuestionsByCategoryQueryVariables >(GET_QUESTIONS_BY_CATEGORY, {
-    variables: { categoryId: currentState.category.id },
-    fetchPolicy: 'network-only', // Disable caching
-  });
+
+  const [filter, setFilter] = useState('');
+
+  const { loading, error, data } = useQuery<GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables>(
+    GET_QUESTIONS_BY_CATEGORY,
+    {
+      variables: { categoryId: currentState.category?.id },
+      fetchPolicy: 'network-only',
+    }
+  );
 
   const handleQuestionClick = async (question: Question) => {
     currentState.question = question;
     onSelectQuestion(question);
 
-    // Fetch the answer for the selected question
     const response = await fetch(`/graphql`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: `query GetAnswerByQuestion($questionId: ID!) {
           answer(questionId: $questionId) {
@@ -57,7 +48,7 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
             answerText
           }
         }`,
-        variables: { questionId: currentState.question.id },
+        variables: { questionId: question.id },
       }),
     });
 
@@ -67,7 +58,7 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
     }
 
     const result = await response.json();
-    if (result.data!.answer) {
+    if (result.data?.answer) {
       setAnswerForQuestion(result.data.answer);
     } else {
       setAnswerForQuestion(null);
@@ -75,53 +66,52 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
     }
   };
 
-  if (loading) {
-    return <CircularProgress />;
+  if (!currentState.category) {
+    return (
+      <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: '8px', bgcolor: '#f9f9f9', height: '80%', overflow: 'auto' }}>
+        <Typography variant="h6" align="center">
+          Пожалуйста, выберите категорию для отображения вопросов.
+        </Typography>
+      </Box>
+    );
   }
+
+  if (loading) return <CircularProgress />;
   if (error) {
     console.error("Error loading questions:", error.message);
     return <Typography color="error">Error: {error.message}</Typography>;
   }
+  
+  const filteredQuestions = data.questions.filter((q) =>
+    q.questionText.toLowerCase().includes(filter.toLowerCase())
+  );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        padding: '6px',
-        margin: '6px',
-        backgroundColor: '#f9f9f9',
-        height: 'calc(100% - 32px)',
-        overflowY: 'auto',
-      }}
-    >
-      <List sx={{ overflowY: 'auto', maxHeight: '100%' }}>
-        {data!.questions.map((question) => (
+    <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: '8px', bgcolor: '#f9f9f9', height: 'calc(100% - 32px)', overflowY: 'auto' }}>
+      <TextField
+        label="Поиск вопросов"
+        variant="outlined"
+        size="small"
+        fullWidth
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        sx={{ mb: 2 }}
+      />
+      <List>
+        {filteredQuestions.map((question) => (
           <ListItem disablePadding key={question.id}>
-            <ListItemButton onClick={() => handleQuestionClick(question)}
-            selected={currentState.question?.id === question.id}
-            sx={{
-              backgroundColor: currentState.question && currentState.question.id === question.id ? 'lightblue' : 'inherit',
-            }} >
+            <ListItemButton
+              onClick={() => handleQuestionClick(question)}
+              selected={currentState.question?.id === question.id}
+              sx={{
+                backgroundColor: currentState.question?.id === question.id ? 'lightblue' : 'inherit',
+              }}
+            >
               <ListItemText primary={question.questionText} />
             </ListItemButton>
-            </ListItem>
-
-          // <ListItem
-          //   button
-          //   key={question.id}
-          //   onClick={() => handleQuestionClick(question)}
-          //   selected={currentState.question && currentState.question.id === question.id}
-          //   sx={{
-          //     backgroundColor: currentState.question && currentState.question.id === question.id ? 'lightblue' : 'inherit',
-          //   }}
-          // >
-          //   <ListItemText primary={question.questionText} />
-          // </ListItem>
+          </ListItem>
         ))}
       </List>
     </Box>
   );
-}; 
+};
