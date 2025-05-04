@@ -82,9 +82,12 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
     return <Typography color="error">Error: {error.message}</Typography>;
   }
   
-  const filteredQuestions = data.questions.filter((q) =>
+  const filteredQuestions = data!.questions
+  .filter((q) =>
     q.questionText.toLowerCase().includes(filter.toLowerCase())
-  );
+  )
+  .sort((a, b) => a.questionText.localeCompare(b.questionText));
+
 
   return (
     <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: '8px', bgcolor: '#f9f9f9', height: 'calc(100% - 32px)', overflowY: 'auto' }}>
