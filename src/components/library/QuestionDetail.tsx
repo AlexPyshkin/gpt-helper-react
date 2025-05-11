@@ -7,12 +7,14 @@ import AddIcon from "@mui/icons-material/Add";
 import UndoIcon from "@mui/icons-material/Undo";
 import CheckIcon from "@mui/icons-material/Check";
 import { AppState } from "../../types";
+import { StopRounded, VoiceChat } from "@mui/icons-material";
 
 type CategoriesListProps = {
   currentState: AppState;
   refetchQuestions: (newState: AppState) => Promise<void>;
   setAnswerLoadingState: (isLoading: boolean) => void;
 };
+
 export const QuestionDetail = ({
   currentState,
   refetchQuestions,
@@ -21,26 +23,28 @@ export const QuestionDetail = ({
   const [createQuestion] = useMutation(CREATE_QUESTION);
   const [updateQuestion] = useMutation(UPDATE_QUESTION);
   const [questionText, setQuestionText] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
 
   useEffect(() => {
     if (currentState.question) {
-      setQuestionText(currentState.question.questionText); // Fill the question text when selected
+      setQuestionText(currentState.question.questionText);
     } else {
-      setQuestionText(""); // Clear text if no question is selected
+      setQuestionText("");
     }
   }, [currentState.question]);
 
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setQuestionText(event.target.value); // Update state on text change
+    setQuestionText(event.target.value);
   };
 
   const handleCommitQuestion = async () => {
     try {
       setAnswerLoadingState(true);
-      let response; // Variable to store response
+      let response;
       let result;
       if (currentState.question) {
-        // Update existing question
         response = await updateQuestion({
           variables: {
             id: currentState.question.id,
@@ -49,7 +53,6 @@ export const QuestionDetail = ({
         });
         result = response.data.updateQuestion;
       } else {
-        // Create new question
         response = await createQuestion({
           variables: {
             questionText: questionText,
@@ -58,9 +61,6 @@ export const QuestionDetail = ({
         });
         result = response.data.createQuestion;
       }
-      // Refetch questions after creating/updating
-      console.log(response);
-      console.log(result);
 
       setAnswerLoadingState(false);
       await refetchQuestions({
@@ -72,24 +72,70 @@ export const QuestionDetail = ({
     }
   };
 
-  // New function to clear the question and reset state
   const handleNewQuestion = () => {
-    setQuestionText(""); // Clear the question text
-    currentState.question = null; // Reset selected question
-    currentState.answer = null; // Reset answer
-    refetchQuestions(currentState); // Optionally refetch questions if needed
+    setQuestionText("");
+    currentState.question = null;
+    currentState.answer = null;
+    refetchQuestions(currentState);
   };
 
-  // New function to revert changes to the original question text
   const handleRevertChanges = () => {
-    setQuestionText(currentState.question!.questionText); // Reset question text to original
+    setQuestionText(currentState.question!.questionText);
   };
 
-  // Determine if buttons should be disabled
+  const recordVoice = async () => {
+    if (!isRecording) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        const chunks: Blob[] = [];
+
+        recorder.ondataavailable = (e) => {
+          chunks.push(e.data);
+        };
+
+        recorder.onstop = async () => {
+          const audioBlob = new Blob(chunks, { type: 'audio/ogg' }); // можно webm, но для совместимости возьмем ogg
+        
+          const formData = new FormData();
+          formData.append('uploaded_file', audioBlob, 'recording.ogg');
+        
+          try {
+            const response = await fetch('http://localhost:9099/transcribe?lang=ru&temperature=0.2&beam_size=5', {
+              method: 'POST',
+              body: formData,
+            });
+        
+            const result = await response.json();
+            console.log('Response:', result);
+            setQuestionText(result.responseBodyBatch[0])
+          } catch (err) {
+            console.error('Error uploading audio:', err);
+          }
+        
+          setAudioChunks([]);
+          stream.getTracks().forEach(track => track.stop());
+        };
+
+        recorder.start();
+        setMediaRecorder(recorder);
+        setAudioChunks(chunks);
+        setIsRecording(true);
+
+      } catch (err) {
+        console.error('Microphone access denied:', err);
+      }
+
+    } else {
+      mediaRecorder?.stop();
+      setIsRecording(false);
+    }
+  };
+
   const isCommitDisabled =
     questionText.trim() === "" ||
-    questionText === currentState.question?.questionText; // Disable if question text is empty or unchanged
-  const isNewDisabled = !currentState.question; // Disable if no question is selected
+    questionText === currentState.question?.questionText;
+  const isNewDisabled = !currentState.question;
 
   return (
     <Box
@@ -122,43 +168,25 @@ export const QuestionDetail = ({
           border: "1px solid #ccc",
           borderRadius: "4px",
           padding: "6px",
-          resize: "none", // Prevent manual resizing
+          resize: "none",
         }}
       />
-      <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
-      >
+      <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <IconButton
-            // variant="outlined"
-            onClick={handleNewQuestion}
-            sx={{ marginTop: "16px" }}
-            color="secondary"
-            disabled={isNewDisabled} // Disable if no question is selected
-          >
+          <IconButton onClick={handleNewQuestion} sx={{ marginTop: "16px" }} color="secondary" disabled={isNewDisabled}>
             <AddIcon />
           </IconButton>
         </Box>
+        <IconButton onClick={recordVoice} sx={{ marginTop: "16px" }} color="primary">
+          {isRecording ? <StopRounded /> : <VoiceChat />}
+        </IconButton>
         <Box sx={{ display: "flex", gap: "16px" }}>
-          <IconButton
-            // variant="outlined"
-            onClick={handleRevertChanges}
-            sx={{ marginTop: "16px" }}
-            color="default"
-            disabled={
-              !currentState?.question ||
-              questionText === currentState.question.questionText
-            } // Disable if the text is already the original
-          >
+          <IconButton onClick={handleRevertChanges} sx={{ marginTop: "16px" }} color="default"
+            disabled={!currentState?.question || questionText === currentState.question.questionText}>
             <UndoIcon />
           </IconButton>
-          <IconButton
-            // variant="contained"
-            onClick={handleCommitQuestion}
-            sx={{ marginTop: "16px" }}
-            color="primary"
-            disabled={isCommitDisabled} // Disable if question text is empty or unchanged
-          >
+          <IconButton onClick={handleCommitQuestion} sx={{ marginTop: "16px" }} color="primary"
+            disabled={isCommitDisabled}>
             <CheckIcon />
           </IconButton>
         </Box>
