@@ -1,7 +1,7 @@
 // src/components/QuestionsList.tsx
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_QUESTIONS_BY_CATEGORY } from '../graphql/queries';
+import { GET_QUESTIONS_BY_CATEGORY } from '../../graphql/queries';
 import {
   List,
   ListItem,
@@ -12,8 +12,8 @@ import {
   ListItemButton,
   TextField,
 } from '@mui/material';
-import { Answer, AppState, Question } from '../types';
-import type { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../graphql/types';
+import { Answer, AppState, Question } from '../../types';
+import type { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../../graphql/types';
 
 type QuestionsListProps = {
   currentState: AppState;

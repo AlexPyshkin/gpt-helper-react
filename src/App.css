@@ -10,16 +10,19 @@
   overflow: hidden; /* Prevent overflow from affecting the footer */
 }
 
-.left {
+.left, .right {
   display: flex;
   flex-direction: column;
+  padding: 6px 0px;
+  overflow: hidden;
+}
+
+.left {
   width: 20%; /* 20% width for categories */
   height: 100%; /* Full height for categories */
 }
 
 .right {
-  display: flex;
-  flex-direction: column;
   width: 80%; /* 80% width for questions and answers */
   height: 100%; /* Full height for questions */
 }

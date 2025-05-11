@@ -1,12 +1,12 @@
-import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Box, Button } from '@mui/material';
 import { AccountCircle, Login } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import reactLogo from '/src/assets/react.svg';
 
 export const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        {/* Logo and Title */}
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
           <img 
             src={reactLogo}
@@ -18,7 +18,15 @@ export const Header = () => {
           </Typography>
         </Box>
 
-        {/* Right-side buttons */}
+        <Box sx={{ display: 'flex', gap: 2, marginRight: 2 }}>
+          <Button color="inherit" component={Link} to="/library">
+            Библиотека
+          </Button>
+          <Button color="inherit" component={Link} to="/dialog">
+            Диалог
+          </Button>
+        </Box>
+
         <Box>
           <IconButton color="inherit" aria-label="account">
             <AccountCircle />
@@ -30,4 +38,4 @@ export const Header = () => {
       </Toolbar>
     </AppBar>
   );
-}; 
+};

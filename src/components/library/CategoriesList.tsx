@@ -1,7 +1,7 @@
 import {useQuery} from '@apollo/client';
-import {GET_CATEGORIES} from '../graphql/queries';
+import {GET_CATEGORIES} from '../../graphql/queries';
 import {List, ListItem, ListItemButton, ListItemText, CircularProgress, Typography, Box} from '@mui/material';
-import {AppState, Category} from '../types';
+import {AppState, Category} from '../../types';
 
 type CategoriesListProps = {
     onSelectCategory: (category: Category) => void;
