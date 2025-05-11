@@ -62,7 +62,8 @@ export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
         padding: '6px',
         margin: '6px',
         backgroundColor: '#f9f9f9',
-        height: '80%',
+        minHeight: '30%',
+        height: '30%',
         overflow: 'auto',
       }}
     >

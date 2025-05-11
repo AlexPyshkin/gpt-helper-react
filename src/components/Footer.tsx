@@ -10,10 +10,7 @@ export const Footer = () => {
       }}
     >
       <Typography variant="body2" color="textSecondary">
-        © {new Date().getFullYear()} Alexandr Pyshkin Inc. All rights reserved.
-      </Typography>
-      <Typography variant="body2" color="textSecondary">
-        Contact: <a href="mailto:alex.pyshkin.91.dev@gmail.com">alex.pyshkin.91.dev@gmail.com</a>
+        © {new Date().getFullYear()} Alexandr Pyshkin Inc. All rights reserved. Contact: <a href="mailto:alex.pyshkin.91.dev@gmail.com">alex.pyshkin.91.dev@gmail.com</a>
       </Typography>
     </Box>
   );

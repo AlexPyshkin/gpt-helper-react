@@ -8,14 +8,16 @@ export const Header = () => {
     <AppBar position="static">
       <Toolbar>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <img 
-            src={reactLogo}
-            alt="Logo" 
-            style={{ height: '40px', marginRight: '16px' }} 
-          />
-          <Typography variant="h6" component="div">
-            GPT Helper
-          </Typography>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+            <img 
+              src={reactLogo}
+              alt="Logo" 
+              style={{ height: '40px', marginRight: '16px' }} 
+            />
+            <Typography variant="h6" component="div">
+              GPT Helper
+            </Typography>
+          </Link>
         </Box>
 
         <Box sx={{ display: 'flex', gap: 2, marginRight: 2 }}>

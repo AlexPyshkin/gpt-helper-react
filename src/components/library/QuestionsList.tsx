@@ -90,7 +90,16 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
 
 
   return (
-    <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: '8px', bgcolor: '#f9f9f9', height: 'calc(100% - 32px)', overflowY: 'auto' }}>
+    <Box sx={{ 
+      p: 2, 
+      border: '1px solid #ccc', 
+      borderRadius: '8px', 
+      bgcolor: '#f9f9f9', 
+      minHeight: '50px',
+      height: '70%',
+      overflowY: 'auto',
+      margin: '6px'
+    }}>
       <TextField
         label="Поиск вопросов"
         variant="outlined"

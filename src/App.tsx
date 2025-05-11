@@ -4,6 +4,8 @@ import { Library } from './components/library/Library';
 import { Dialog } from './components/dialog/Dialog';
 import { Typography } from '@mui/material';
 import { Footer } from './components/Footer';
+import './App.css';
+
 
 function App() {
   return (
@@ -15,7 +17,7 @@ function App() {
         <Route
           path="/"
           element={
-            <Typography variant="h5" sx={{ padding: 2 }}>
+            <Typography variant="h5" sx={{ padding: 2, height: '89vh' }}>
               Добро пожаловать в GPT Helper!
             </Typography>
           }

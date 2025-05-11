@@ -24,7 +24,8 @@ export const CategoriesList = ({onSelectCategory, currentState}: CategoriesListP
                 padding: '6px',
                 margin: '6px',
                 backgroundColor: '#f9f9f9',
-                height: 'calc(100% - 32px)',
+                minHeight: '50px',
+                height: '70%',
                 overflowY: 'auto',
             }}
         >

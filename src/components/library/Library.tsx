@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client';
 import { GET_QUESTIONS_BY_CATEGORY } from '../../graphql/queries';
 import type { AppState, Category, Question, Answer } from '../../types';
 import type { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../../graphql/types';
+import { Box } from '@mui/material';
 
 export const Library = () => {
   const [state, setState] = useState<AppState>({
@@ -46,15 +47,38 @@ export const Library = () => {
   };
 
   return (
-    <div className="content" style={{ display: 'flex', flex: 1 }}>
-      <div className="left" style={{ width: '30%', padding: '6px 0px' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        height: 'calc(100vh - 96px)', // 64px for header + 64px for footer
+        width: '100%',
+        overflow: 'hidden',
+        position: 'relative',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '30%',
+          minWidth: '300px',
+          height: '100%',
+        }}
+      >
         <CategoriesList onSelectCategory={handleCategorySelect} currentState={state} />
         <QuestionDetail currentState={state} refetchQuestions={refetchQuestionsAndSetSelected} setAnswerLoadingState={setLoadingAnswer} />
-      </div>
-      <div className="right" style={{ width: '80%', padding: '6px 0px' }}>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '70%',
+          height: '100%',
+        }}
+      >
         <QuestionsList currentState={state} onSelectQuestion={handleQuestionSelect} setAnswerForQuestion={handleAnswerUpdate} />
         <AnswerDetail currentState={state} />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };

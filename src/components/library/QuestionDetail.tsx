@@ -103,7 +103,8 @@ export const QuestionDetail = ({
         padding: '6px',
         margin: '6px',
         backgroundColor: '#f9f9f9',
-        height: '80%',
+        minHeight: '20%',
+        height: '30%',
         overflow: 'auto',
       }}
     >
@@ -121,7 +122,6 @@ export const QuestionDetail = ({
           border: "1px solid #ccc",
           borderRadius: "4px",
           padding: "6px",
-          marginBottom: "16px",
           resize: "none", // Prevent manual resizing
         }}
       />
