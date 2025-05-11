@@ -2,11 +2,11 @@ import { Box, IconButton } from "@mui/material";
 import TextareaAutosize from "react-textarea-autosize";
 import { useState, useEffect, ChangeEvent } from "react";
 import { useMutation } from '@apollo/client';
-import { CREATE_QUESTION, UPDATE_QUESTION } from "../graphql/queries";
+import { CREATE_QUESTION, UPDATE_QUESTION } from "../../graphql/queries";
 import AddIcon from "@mui/icons-material/Add";
 import UndoIcon from "@mui/icons-material/Undo";
 import CheckIcon from "@mui/icons-material/Check";
-import { AppState } from "../types";
+import { AppState } from "../../types";
 
 type CategoriesListProps = {
   currentState: AppState;
