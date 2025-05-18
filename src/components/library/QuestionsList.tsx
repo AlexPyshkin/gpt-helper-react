@@ -84,15 +84,16 @@ export const QuestionsList = ({
     },
     typography: {
       library: {
-        variant: 'body1' as const
+        variant: 'body1' as const,
+        fontSize: '1rem',
+        lineHeight: 1.5,
+        padding: '0px'
       },
       dialog: {
         variant: 'body2' as const,
-        sx: {
-          fontSize: '0.7rem',
-          lineHeight: 1.2,
-          padding: '0px'
-        }
+        fontSize: '0.7rem',
+        lineHeight: 1.2,
+        padding: '0px'
       }
     }
   };
@@ -155,7 +156,14 @@ export const QuestionsList = ({
             >
               <ListItemText 
                 primary={question.questionText} 
-                primaryTypographyProps={styles.typography[variant]}
+                sx={{
+                  '& .MuiListItemText-primary': {
+                    variant: styles.typography[variant].variant,
+                    fontSize: styles.typography[variant].fontSize,
+                    lineHeight: styles.typography[variant].lineHeight,
+                    padding: styles.typography[variant].padding
+                  }
+                }}
               />
             </ListItemButton>
           </ListItem>
