@@ -70,8 +70,8 @@ export const Dialog = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: '30%',
-          minWidth: '300px',
+          width: '10%',
+          minWidth: '230px',
           height: '100%',
         }}
       >
@@ -89,7 +89,7 @@ export const Dialog = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: '70%',
+          width: '90%',
           height: '100%',
         }}
       >
@@ -97,7 +97,8 @@ export const Dialog = () => {
         <QuestionDetail 
           currentState={state} 
           refetchQuestions={refetchQuestionsAndSetSelected} 
-          setAnswerLoadingState={setLoadingAnswer} 
+          setAnswerLoadingState={setLoadingAnswer}
+          variant="dialog"
         />
       </Box>
     </Box>

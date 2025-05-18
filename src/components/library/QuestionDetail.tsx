@@ -13,18 +13,41 @@ type CategoriesListProps = {
   currentState: AppState;
   refetchQuestions: (newState: AppState) => Promise<void>;
   setAnswerLoadingState: (isLoading: boolean) => void;
+  variant?: 'library' | 'dialog';
 };
 
 export const QuestionDetail = ({
   currentState,
   refetchQuestions,
   setAnswerLoadingState,
+  variant = 'library'
 }: CategoriesListProps) => {
   const [createQuestion] = useMutation(CREATE_QUESTION);
   const [updateQuestion] = useMutation(UPDATE_QUESTION);
   const [questionText, setQuestionText] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+
+  const styles = {
+    container: {
+      library: {
+        minHeight: '20%',
+        height: '30%',
+      },
+      dialog: {
+        minHeight: '15%',
+        height: '18%',
+      }
+    },
+    textarea: {
+      library: {
+        minRows: 30,
+      },
+      dialog: {
+        minRows: 15,
+      }
+    }
+  };
 
   useEffect(() => {
     if (currentState.question) {
@@ -146,13 +169,12 @@ export const QuestionDetail = ({
         padding: '6px',
         margin: '6px',
         backgroundColor: '#f9f9f9',
-        minHeight: '20%',
-        height: '30%',
         overflow: 'auto',
+        ...styles.container[variant]
       }}
     >
       <TextareaAutosize
-        minRows={30}
+        minRows={styles.textarea[variant].minRows}
         placeholder={
           isNewDisabled
             ? "Задайте новый вопрос категории " + currentState.category?.name
