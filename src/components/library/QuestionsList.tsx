@@ -19,11 +19,15 @@ type QuestionsListProps = {
   currentState: AppState;
   onSelectQuestion: (newState: Question) => void;
   setAnswerForQuestion: (answer: Answer | null) => void;
+  variant?: 'library' | 'dialog';
 };
 
-export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQuestion }: QuestionsListProps) => {
-
-
+export const QuestionsList = ({ 
+  currentState, 
+  onSelectQuestion, 
+  setAnswerForQuestion,
+  variant = 'library'
+}: QuestionsListProps) => {
   const [filter, setFilter] = useState('');
 
   const { loading, error, data } = useQuery<GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables>(
@@ -66,9 +70,65 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
     }
   };
 
+  const styles = {
+    container: {
+      library: {
+        p: 2,
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        bgcolor: '#f9f9f9',
+        minHeight: '50px',
+        height: '70%',
+        overflowY: 'auto',
+        margin: '6px'
+      },
+      dialog: {
+        p: 1,
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        bgcolor: '#f9f9f9',
+        height: '100%',
+        overflowY: 'auto',
+      }
+    },
+    listItem: {
+      library: {
+        py: 0
+      },
+      dialog: {
+        py: 0
+      }
+    },
+    listItemButton: {
+      library: {
+        // minHeight: '48px'
+        py: 0,
+      },
+      dialog: {
+        py: 0,
+        '&.Mui-selected': {
+          backgroundColor: 'rgba(144, 202, 249, 0.2)',
+        }
+      }
+    },
+    typography: {
+      library: {
+        variant: 'body1'
+      },
+      dialog: {
+        variant: 'body2',
+        sx: {
+          fontSize: '0.7rem',
+          lineHeight: 1.2,
+          padding: '0px'
+        }
+      }
+    }
+  };
+
   if (!currentState.category) {
     return (
-      <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: '8px', bgcolor: '#f9f9f9', height: '80%', overflow: 'auto' }}>
+      <Box sx={styles.container[variant]}>
         <Typography variant="h6" align="center">
           Пожалуйста, выберите категорию для отображения вопросов.
         </Typography>
@@ -83,25 +143,13 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
   }
   
   const filteredQuestions = data!.questions
-  .filter((q) =>
-    q.questionText.toLowerCase().includes(filter.toLowerCase())
-  )
-  .sort((a, b) => a.questionText.localeCompare(b.questionText));
-
+    .filter((q) => q.questionText.toLowerCase().includes(filter.toLowerCase()))
+    .sort((a, b) => a.questionText.localeCompare(b.questionText));
 
   return (
-    <Box sx={{ 
-      p: 2, 
-      border: '1px solid #ccc', 
-      borderRadius: '8px', 
-      bgcolor: '#f9f9f9', 
-      minHeight: '50px',
-      height: '70%',
-      overflowY: 'auto',
-      margin: '6px'
-    }}>
+    <Box sx={styles.container[variant]}>
       <TextField
-        label="Поиск вопросов"
+        label="Поиск"
         variant="outlined"
         size="small"
         fullWidth
@@ -111,15 +159,16 @@ export const QuestionsList = ({ currentState, onSelectQuestion, setAnswerForQues
       />
       <List>
         {filteredQuestions.map((question) => (
-          <ListItem disablePadding key={question.id}>
+          <ListItem disablePadding key={question.id} sx={styles.listItem[variant]}>
             <ListItemButton
               onClick={() => handleQuestionClick(question)}
               selected={currentState.question?.id === question.id}
-              sx={{
-                backgroundColor: currentState.question?.id === question.id ? 'lightblue' : 'inherit',
-              }}
+              sx={styles.listItemButton[variant]}
             >
-              <ListItemText primary={question.questionText} />
+              <ListItemText 
+                primary={question.questionText} 
+                primaryTypographyProps={styles.typography[variant]}
+              />
             </ListItemButton>
           </ListItem>
         ))}

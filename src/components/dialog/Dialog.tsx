@@ -28,7 +28,6 @@ export const Dialog = () => {
     }
   }, [data]);
 
-
   const { refetch: updateQuestions } = useQuery<GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables>(
     GET_QUESTIONS_BY_CATEGORY,
     {
@@ -45,6 +44,7 @@ export const Dialog = () => {
     await updateQuestions();
     setState((prevState) => ({ ...prevState, question: newState.question, answer: newState.answer }));
   };
+
   const handleQuestionSelect = (question: Question) => {
     setState({ ...state, question, loadingAnswer: true });
   };
@@ -52,7 +52,6 @@ export const Dialog = () => {
   const handleAnswerUpdate = (answer: Answer | null) => {
     setState({ ...state, answer, loadingAnswer: false });
   };
-
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography>Error: {error.message}</Typography>;
@@ -67,8 +66,6 @@ export const Dialog = () => {
         position: 'relative',
       }}
     >
-
-
       <Box
         sx={{
           display: 'flex',
@@ -78,11 +75,15 @@ export const Dialog = () => {
           height: '100%',
         }}
       >
-        <Typography variant="h4" sx={{ padding: 2, height: '89vh' }}>
+        <Typography variant="h6" sx={{ p: 1, borderBottom: '1px solid #ccc' }}>
           {state.category?.name || 'Категория не найдена'}
         </Typography>
-        <QuestionsList currentState={state} onSelectQuestion={handleQuestionSelect} setAnswerForQuestion={handleAnswerUpdate} />
-
+        <QuestionsList 
+          currentState={state} 
+          onSelectQuestion={handleQuestionSelect} 
+          setAnswerForQuestion={handleAnswerUpdate}
+          variant="dialog"
+        />
       </Box>
       <Box
         sx={{
@@ -92,8 +93,12 @@ export const Dialog = () => {
           height: '100%',
         }}
       >
-       <AnswerDetail currentState={state} />
-       <QuestionDetail currentState={state} refetchQuestions={refetchQuestionsAndSetSelected} setAnswerLoadingState={setLoadingAnswer} />
+        <AnswerDetail currentState={state} />
+        <QuestionDetail 
+          currentState={state} 
+          refetchQuestions={refetchQuestionsAndSetSelected} 
+          setAnswerLoadingState={setLoadingAnswer} 
+        />
       </Box>
     </Box>
   );
