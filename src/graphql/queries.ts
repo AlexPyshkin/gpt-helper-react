@@ -9,6 +9,15 @@ export const GET_LIBRARY_CATEGORIES = gql`
   }
 `;
 
+export const GET_DIALOG_CATEGORY = gql`
+  query GetLibraryCategories {
+    category: dialogCategory {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_QUESTIONS_BY_CATEGORY = gql`
   query GetQuestionsByCategory($categoryId: ID!) {
     questions(categoryId: $categoryId) {
