@@ -13,6 +13,7 @@ type CategoriesListProps = {
   currentState: AppState;
   refetchQuestions: (newState: AppState) => Promise<void>;
   setAnswerLoadingState: (isLoading: boolean) => void;
+  updateMode?: boolean,
   variant?: 'library' | 'dialog';
 };
 
@@ -20,6 +21,7 @@ export const QuestionDetail = ({
   currentState,
   refetchQuestions,
   setAnswerLoadingState,
+  updateMode = true,
   variant = 'library'
 }: CategoriesListProps) => {
   const [createQuestion] = useMutation(CREATE_QUESTION);
@@ -66,7 +68,7 @@ export const QuestionDetail = ({
       setAnswerLoadingState(true);
       let response;
       let result;
-      if (currentState.question) {
+      if (currentState.question && updateMode) {
         response = await updateQuestion({
           variables: {
             id: currentState.question.id,
@@ -96,7 +98,9 @@ export const QuestionDetail = ({
 
   const handleNewQuestion = () => {
     setQuestionText("");
-    currentState.question = null;
+    if (currentState.question) {
+      currentState.question.questionText = "";
+    }
     currentState.answer = null;
     refetchQuestions(currentState);
   };

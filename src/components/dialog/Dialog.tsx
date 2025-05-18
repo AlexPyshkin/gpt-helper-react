@@ -42,6 +42,9 @@ export const Dialog = () => {
   
   const refetchQuestionsAndSetSelected = async (newState: AppState) => {
     await updateQuestions();
+    if (newState.question) {
+      newState.question.questionText = "";
+    }
     setState((prevState) => ({ ...prevState, question: newState.question, answer: newState.answer }));
   };
 
@@ -101,6 +104,7 @@ export const Dialog = () => {
           currentState={state} 
           refetchQuestions={refetchQuestionsAndSetSelected} 
           setAnswerLoadingState={setLoadingAnswer}
+          updateMode={false}
           variant="dialog"
         />
       </Box>
