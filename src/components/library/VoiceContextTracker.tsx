@@ -1,0 +1,199 @@
+import { useState, useEffect } from 'react';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  Typography,
+  Box,
+  ListItemButton,
+  IconButton,
+} from '@mui/material';
+import { AppState } from '../../types';
+import { StopRounded, VoiceChat } from '@mui/icons-material';
+import { useLazyQuery } from '@apollo/client';
+import { GET_TEXT_CONTEXT } from '../../graphql/queries';
+
+type VoiceContextTrackerProps = {
+  currentState: AppState;
+  variant?: 'library' | 'dialog';
+};
+
+export const VoiceContextTracker = ({ 
+  currentState, 
+  variant = 'library'
+}: VoiceContextTrackerProps) => {
+  const [currentVoiceText, setCurrentVoiceText] = useState('');
+  const [speachContext, setSpeachContext] = useState<string[]>([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+
+  const [getTextContext, { data, loading }] = useLazyQuery(GET_TEXT_CONTEXT);
+
+  useEffect(() => {
+    if (currentVoiceText) {
+      console.log("Sending query to get context..." + currentVoiceText)
+      getTextContext({
+        variables: {
+          inputText: currentVoiceText
+        }
+      });
+    }
+  }, [currentVoiceText, getTextContext]);
+
+  useEffect(() => {
+    if (data?.queryToModel) {
+      setSpeachContext(prevContext => [...prevContext, ...data.queryToModel]);
+    }
+  }, [data]);
+
+  const recordVoice = async () => {
+    if (!isRecording) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        const chunks: Blob[] = [];
+
+        recorder.ondataavailable = (e) => {
+          chunks.push(e.data);
+        };
+
+        recorder.onstop = async () => {
+          const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
+        
+          const formData = new FormData();
+          formData.append('uploaded_file', audioBlob, 'recording.ogg');
+        
+          try {
+            const response = await fetch('http://localhost:9099/transcribe?lang=ru&temperature=0.2&beam_size=5', {
+              method: 'POST',
+              body: formData,
+            });
+        
+            const result = await response.json();
+            console.log('Response:', result);
+            setCurrentVoiceText(result.responseBodyBatch[0]);
+          } catch (err) {
+            console.error('Error uploading audio:', err);
+          }
+        
+          stream.getTracks().forEach(track => track.stop());
+        };
+
+        recorder.start();
+        setMediaRecorder(recorder);
+        setIsRecording(true);
+
+      } catch (err) {
+        console.error('Microphone access denied:', err);
+      }
+
+    } else {
+      mediaRecorder?.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const styles = {
+    container: {
+      library: {
+        p: 2,
+        height: '70%',
+      },
+      dialog: {
+        p: 1,
+        height: '100%',
+      }
+    },
+    typography: {
+      library: {
+        variant: 'body1' as const,
+        fontSize: '1rem',
+        lineHeight: 1.5,
+        padding: '0px'
+      },
+      dialog: {
+        variant: 'body2' as const,
+        fontSize: '0.7rem',
+        lineHeight: 1.2,
+        padding: '0px'
+      }
+    }
+  };
+
+  if (!currentState.category) {
+    return (
+      <Box sx={{ 
+        ...styles.container[variant],
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        margin: '6px',
+        bgcolor: '#f9f9f9',
+        overflow: 'auto'
+      }}>
+        <Typography variant="h6" align="center">
+          Пожалуйста, выберите категорию для отображения вопросов.
+        </Typography>
+      </Box>
+    );
+  }
+
+  // if (loading) return <CircularProgress />;
+  // if (error) {
+  //   console.error("Error loading questions:", error.message);
+  //   return <Typography color="error">Error: {error.message}</Typography>;
+  // }
+  
+  // const filteredQuestions = data!.questions
+  //   .filter((q) => q.questionText.toLowerCase().includes(filter.toLowerCase()))
+  //   .sort((a, b) => a.questionText.localeCompare(b.questionText));
+
+  return (
+    <Box sx={{ 
+      ...styles.container[variant],
+      border: '1px solid #ccc',
+      borderRadius: '8px',
+      margin: '6px',
+      bgcolor: '#f9f9f9',
+      overflowY: 'auto'
+    }}>
+    <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
+      <IconButton onClick={recordVoice} color="primary">
+        {isRecording ? <StopRounded /> : <VoiceChat />}
+      </IconButton>
+    </Box>
+      {speachContext.length === 0 ? (
+        <Typography variant="body1" align="center" sx={{ p: 2 }}>
+          Нет записанных сообщений
+        </Typography>
+      ) : (
+        <List>
+          {speachContext.map((item, index) => (
+            <ListItem disablePadding key={`voice-message-${index}`}>
+              <ListItemButton
+                sx={{
+                  py: 0,
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(144, 202, 249, 0.2)',
+                  }
+                }}
+              >
+                <ListItemText 
+                  primary={item} 
+                  sx={{
+                    '& .MuiListItemText-primary': {
+                      variant: styles.typography[variant].variant,
+                      fontSize: styles.typography[variant].fontSize,
+                      lineHeight: styles.typography[variant].lineHeight,
+                      padding: styles.typography[variant].padding
+                    }
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      )}
+    </Box>
+  );
+};

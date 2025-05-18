@@ -7,6 +7,7 @@ import { QuestionDetail } from '../library/QuestionDetail';
 import { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../../graphql/types';
 import { QuestionsList } from '../library/QuestionsList';
 import { AnswerDetail } from '../library/AnswerDetail';
+import { VoiceContextTracker } from '../library/VoiceContextTracker';
 
 export const Dialog = () => {
   const [state, setState] = useState<AppState>({
@@ -107,6 +108,20 @@ export const Dialog = () => {
           updateMode={false}
           variant="dialog"
         />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '20%',
+          height: '100%',
+        }}
+      >
+      <VoiceContextTracker
+          currentState={state}
+          variant="dialog" >
+        
+      </VoiceContextTracker>
       </Box>
     </Box>
   );

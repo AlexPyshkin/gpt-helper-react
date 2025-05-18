@@ -9,8 +9,14 @@ export const GET_LIBRARY_CATEGORIES = gql`
   }
 `;
 
+export const GET_TEXT_CONTEXT = gql`
+  query GetTextContext($inputText: String!) {
+    queryToModel(inputText: $inputText)
+  }
+`;
+
 export const GET_DIALOG_CATEGORY = gql`
-  query GetLibraryCategories {
+  query GetDialogCategories {
     category: dialogCategory {
       id
       name
