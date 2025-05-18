@@ -1,44 +1,44 @@
-.app-container {
+/* .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full height of the viewport */
+  height: 100vh;
 }
 
 .content {
   display: flex;
-  flex: 1; /* Take up remaining space */
-  overflow: hidden; /* Prevent overflow from affecting the footer */
-}
+  flex: 1; 
+  overflow: hidden; 
+} */
 
-.left, .right {
+/* .left, .right {
   display: flex;
   flex-direction: column;
   padding: 6px 0px;
   overflow: hidden;
-}
+} */
 
-.left {
-  width: 20%; /* 20% width for categories */
-  height: 100%; /* Full height for categories */
+/* .left {
+  width: 20%; 
+  height: 100%; 
 }
 
 .right {
-  width: 80%; /* 80% width for questions and answers */
-  height: 100%; /* Full height for questions */
+  width: 80%; 
+  height: 100%; 
 }
 
 .questions-list {
-  flex: 1; /* Allow questions list to take available space */
-  overflow-y: auto; /* Enable vertical scrolling */
+  flex: 1; 
+  overflow-y: auto; 
 }
 
 .question-detail {
-  height: 30%; /* Fixed height for QuestionDetail */
+  height: 30%; 
 }
 
 .answer-detail {
-  height: 70%; /* Fixed height for AnswerDetail */
-}
+  height: 70%; 
+} */
 
 .footer {
   position: fixed; /* Fix the footer to the bottom */

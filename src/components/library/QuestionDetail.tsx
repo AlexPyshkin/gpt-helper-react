@@ -44,7 +44,7 @@ export const QuestionDetail = ({
         minRows: 30,
       },
       dialog: {
-        minRows: 15,
+        minRows: 20,
       }
     }
   };
@@ -192,19 +192,19 @@ export const QuestionDetail = ({
       />
       <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <IconButton onClick={handleNewQuestion} sx={{ marginTop: "16px" }} color="secondary" disabled={isNewDisabled}>
+          <IconButton onClick={handleNewQuestion} color="secondary" disabled={isNewDisabled}>
             <AddIcon />
           </IconButton>
         </Box>
-        <IconButton onClick={recordVoice} sx={{ marginTop: "16px" }} color="primary">
+        <IconButton onClick={recordVoice} color="primary">
           {isRecording ? <StopRounded /> : <VoiceChat />}
         </IconButton>
         <Box sx={{ display: "flex", gap: "16px" }}>
-          <IconButton onClick={handleRevertChanges} sx={{ marginTop: "16px" }} color="default"
+          <IconButton onClick={handleRevertChanges} color="default"
             disabled={!currentState?.question || questionText === currentState.question.questionText}>
             <UndoIcon />
           </IconButton>
-          <IconButton onClick={handleCommitQuestion} sx={{ marginTop: "16px" }} color="primary"
+          <IconButton onClick={handleCommitQuestion} color="primary"
             disabled={isCommitDisabled}>
             <CheckIcon />
           </IconButton>
