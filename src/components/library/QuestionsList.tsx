@@ -75,11 +75,10 @@ export const QuestionsList = ({
       library: {
         p: 2,
         height: '70%',
-        margin: '6px'
       },
       dialog: {
         p: 1,
-        height: '100%'
+        height: '100%',
       }
     },
     typography: {
@@ -104,6 +103,7 @@ export const QuestionsList = ({
         ...styles.container[variant],
         border: '1px solid #ccc',
         borderRadius: '8px',
+        margin: '6px',
         bgcolor: '#f9f9f9',
         overflow: 'auto'
       }}>
@@ -129,6 +129,7 @@ export const QuestionsList = ({
       ...styles.container[variant],
       border: '1px solid #ccc',
       borderRadius: '8px',
+      margin: '6px',
       bgcolor: '#f9f9f9',
       overflowY: 'auto'
     }}>

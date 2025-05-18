@@ -38,7 +38,7 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
         minRows: 30,
       },
       dialog: {
-        minRows: 20,
+        minRows: 100,
       }
     }
   };
@@ -103,10 +103,10 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
               onChange={handleInputChange}
               style={{
                 width: '100%',
+                height: '100%',
                 border: '1px solid #ccc',
                 borderRadius: '4px',
                 padding: '6px 0px',
-                marginBottom: '16px',
                 resize: 'none'
               }}
             />
