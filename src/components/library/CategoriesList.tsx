@@ -1,5 +1,5 @@
 import {useQuery} from '@apollo/client';
-import {GET_CATEGORIES} from '../../graphql/queries';
+import {GET_LIBRARY_CATEGORIES} from '../../graphql/queries';
 import {List, ListItem, ListItemButton, ListItemText, CircularProgress, Typography, Box} from '@mui/material';
 import {AppState, Category} from '../../types';
 
@@ -9,7 +9,7 @@ type CategoriesListProps = {
 };
 
 export const CategoriesList = ({onSelectCategory, currentState}: CategoriesListProps) => {
-    const {loading, error, data} = useQuery(GET_CATEGORIES);
+    const {loading, error, data} = useQuery(GET_LIBRARY_CATEGORIES);
 
     if (loading) return <CircularProgress/>;
     if (error) return <Typography color="error">Error: {error.message}</Typography>;
