@@ -20,7 +20,6 @@ export const Dialog = () => {
   const { loading, error, data } = useQuery(GET_DIALOG_CATEGORY);
 
   useEffect(() => {
-    console.log(data);
     if (data?.category) {
       setState(prevState => ({
         ...prevState,

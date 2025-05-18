@@ -8,6 +8,7 @@ import {
   Box,
   ListItemButton,
   IconButton,
+  LinearProgress,
 } from '@mui/material';
 import { AppState } from '../../types';
 import { StopRounded, VoiceChat } from '@mui/icons-material';
@@ -27,12 +28,12 @@ export const VoiceContextTracker = ({
   const [speachContext, setSpeachContext] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [getTextContext, { data, loading }] = useLazyQuery(GET_TEXT_CONTEXT);
 
   useEffect(() => {
     if (currentVoiceText) {
-      console.log("Sending query to get context..." + currentVoiceText)
       getTextContext({
         variables: {
           inputText: currentVoiceText
@@ -65,16 +66,19 @@ export const VoiceContextTracker = ({
           formData.append('uploaded_file', audioBlob, 'recording.ogg');
         
           try {
+            setIsProcessing(true);
             const response = await fetch('http://localhost:9099/transcribe?lang=ru&temperature=0.2&beam_size=5', {
               method: 'POST',
               body: formData,
             });
         
             const result = await response.json();
-            console.log('Response:', result);
+            console.log('Response voice text:', result);
             setCurrentVoiceText(result.responseBodyBatch[0]);
           } catch (err) {
             console.error('Error uploading audio:', err);
+          } finally {
+            setIsProcessing(false);
           }
         
           stream.getTracks().forEach(track => track.stop());
@@ -157,11 +161,17 @@ export const VoiceContextTracker = ({
       bgcolor: '#f9f9f9',
       overflowY: 'auto'
     }}>
-    <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
-      <IconButton onClick={recordVoice} color="primary">
-        {isRecording ? <StopRounded /> : <VoiceChat />}
-      </IconButton>
+    <Box sx={{ display: "flex", width: "100%", justifyContent: "center" }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <IconButton onClick={recordVoice} color="primary">
+          {isRecording ? <StopRounded /> : <VoiceChat />}
+        </IconButton>
+        {isRecording && <LinearProgress sx={{ width: 100 }} />}
+      </Box>
     </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+        {(isProcessing || loading) && <CircularProgress size={24} />}
+      </Box>
       {speachContext.length === 0 ? (
         <Typography variant="body1" align="center" sx={{ p: 2 }}>
           Нет записанных сообщений

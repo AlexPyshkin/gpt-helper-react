@@ -58,11 +58,9 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
   };
 
   const handleSave = async () => {
-    console.log('Answer saved:', answerText);
     try {
       let response = await updateAnswer({ variables: { answerId: currentState.answer!.id, answerText: answerText } });
       currentState.answer = response.data.updateAnswer;
-      console.log(currentState);
       setIsChanged(false);
     } catch (error) {
       console.error("Error saving answer:", error);

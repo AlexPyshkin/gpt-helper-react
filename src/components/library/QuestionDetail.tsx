@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, CircularProgress, LinearProgress } from "@mui/material";
 import TextareaAutosize from "react-textarea-autosize";
 import { useState, useEffect, ChangeEvent } from "react";
 import { useMutation } from '@apollo/client';
@@ -29,6 +29,7 @@ export const QuestionDetail = ({
   const [questionText, setQuestionText] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const styles = {
     container: {
@@ -127,16 +128,18 @@ export const QuestionDetail = ({
           formData.append('uploaded_file', audioBlob, 'recording.ogg');
         
           try {
+            setIsProcessing(true);
             const response = await fetch('http://localhost:9099/transcribe?lang=ru&temperature=0.2&beam_size=5', {
               method: 'POST',
               body: formData,
             });
         
             const result = await response.json();
-            console.log('Response:', result);
             setQuestionText(result.responseBodyBatch[0])
           } catch (err) {
             console.error('Error uploading audio:', err);
+          } finally {
+            setIsProcessing(false);
           }
         
           stream.getTracks().forEach(track => track.stop());
@@ -200,9 +203,13 @@ export const QuestionDetail = ({
             <AddIcon />
           </IconButton>
         </Box>
-        <IconButton onClick={recordVoice} color="primary">
-          {isRecording ? <StopRounded /> : <VoiceChat />}
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton onClick={recordVoice} color="primary">
+            {isRecording ? <StopRounded /> : <VoiceChat />}
+          </IconButton>
+          {isProcessing && <CircularProgress size={24} />}
+          {isRecording && <LinearProgress sx={{ width: 100 }} />}
+        </Box>
         <Box sx={{ display: "flex", gap: "16px" }}>
           <IconButton onClick={handleRevertChanges} color="default"
             disabled={!currentState?.question || questionText === currentState.question.questionText}>
