@@ -74,49 +74,20 @@ export const QuestionsList = ({
     container: {
       library: {
         p: 2,
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        bgcolor: '#f9f9f9',
-        minHeight: '50px',
         height: '70%',
-        overflowY: 'auto',
         margin: '6px'
       },
       dialog: {
         p: 1,
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        bgcolor: '#f9f9f9',
-        height: '100%',
-        overflowY: 'auto',
-      }
-    },
-    listItem: {
-      library: {
-        py: 0
-      },
-      dialog: {
-        py: 0
-      }
-    },
-    listItemButton: {
-      library: {
-        // minHeight: '48px'
-        py: 0,
-      },
-      dialog: {
-        py: 0,
-        '&.Mui-selected': {
-          backgroundColor: 'rgba(144, 202, 249, 0.2)',
-        }
+        height: '100%'
       }
     },
     typography: {
       library: {
-        variant: 'body1'
+        variant: 'body1' as const
       },
       dialog: {
-        variant: 'body2',
+        variant: 'body2' as const,
         sx: {
           fontSize: '0.7rem',
           lineHeight: 1.2,
@@ -128,7 +99,13 @@ export const QuestionsList = ({
 
   if (!currentState.category) {
     return (
-      <Box sx={styles.container[variant]}>
+      <Box sx={{ 
+        ...styles.container[variant],
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        bgcolor: '#f9f9f9',
+        overflow: 'auto'
+      }}>
         <Typography variant="h6" align="center">
           Пожалуйста, выберите категорию для отображения вопросов.
         </Typography>
@@ -147,7 +124,13 @@ export const QuestionsList = ({
     .sort((a, b) => a.questionText.localeCompare(b.questionText));
 
   return (
-    <Box sx={styles.container[variant]}>
+    <Box sx={{ 
+      ...styles.container[variant],
+      border: '1px solid #ccc',
+      borderRadius: '8px',
+      bgcolor: '#f9f9f9',
+      overflowY: 'auto'
+    }}>
       <TextField
         label="Поиск"
         variant="outlined"
@@ -159,11 +142,16 @@ export const QuestionsList = ({
       />
       <List>
         {filteredQuestions.map((question) => (
-          <ListItem disablePadding key={question.id} sx={styles.listItem[variant]}>
+          <ListItem disablePadding key={question.id}>
             <ListItemButton
               onClick={() => handleQuestionClick(question)}
               selected={currentState.question?.id === question.id}
-              sx={styles.listItemButton[variant]}
+              sx={{
+                py: 0,
+                '&.Mui-selected': {
+                  backgroundColor: 'rgba(144, 202, 249, 0.2)',
+                }
+              }}
             >
               <ListItemText 
                 primary={question.questionText} 
