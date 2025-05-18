@@ -11,11 +11,37 @@ import ReactMarkdown from 'react-markdown';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
+type AnswerDetailProps = {
+  currentState: AppState;
+  variant?: 'library' | 'dialog';
+};
+
+export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetailProps) => {
   const [answerText, setAnswerText] = useState('');
   const [updateAnswer] = useMutation(UPDATE_ANSWER);
   const [isChanged, setIsChanged] = useState(false);
   const [editMode, setEditMode] = useState(false);
+
+  const styles = {
+    container: {
+      library: {
+        minHeight: '30%',
+        height: '30%',
+      },
+      dialog: {
+        minHeight: '50%',
+        height: '100%',
+      }
+    },
+    textarea: {
+      library: {
+        minRows: 30,
+      },
+      dialog: {
+        minRows: 20,
+      }
+    }
+  };
 
   useEffect(() => {
     if (currentState.answer) {
@@ -62,9 +88,8 @@ export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
         padding: '6px',
         margin: '6px',
         backgroundColor: '#f9f9f9',
-        minHeight: '30%',
-        height: '30%',
         overflow: 'auto',
+        ...styles.container[variant]
       }}
     >
       {currentState.loadingAnswer ? (
@@ -73,7 +98,7 @@ export const AnswerDetail = ({ currentState }:{ currentState: AppState; }) => {
         <>
           {editMode ? (
             <TextareaAutosize
-              minRows={30}
+              minRows={styles.textarea[variant].minRows}
               value={answerText}
               onChange={handleInputChange}
               style={{

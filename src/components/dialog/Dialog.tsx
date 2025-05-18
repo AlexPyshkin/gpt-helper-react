@@ -75,7 +75,7 @@ export const Dialog = () => {
           height: '100%',
         }}
       >
-        <Typography variant="h6" sx={{ p: 1, borderBottom: '1px solid #ccc' }}>
+        <Typography variant="h6" sx={{ p: 1, borderBottom: '1px solid #ccc', display: 'none' }}>
           {state.category?.name || 'Категория не найдена'}
         </Typography>
         <QuestionsList 
@@ -93,7 +93,10 @@ export const Dialog = () => {
           height: '100%',
         }}
       >
-        <AnswerDetail currentState={state} />
+        <AnswerDetail 
+          currentState={state} 
+          variant="dialog"
+        />
         <QuestionDetail 
           currentState={state} 
           refetchQuestions={refetchQuestionsAndSetSelected} 
