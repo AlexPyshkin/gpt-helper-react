@@ -14,7 +14,7 @@ docker rm -f "$APP_NAME" || true
 
 # Логинимся в Docker Hub
 echo "Выполняется вход в Docker Hub..."
-echo dckr_pat_x6K7NC-yfiC6zDc8E82ESjsb1zs | docker login -u "$DOCKER_USERNAME" --password-stdin
+echo $DOCKER_TOKEN | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 if [ $? -ne 0 ]; then
     echo "Ошибка входа в Docker Hub. Проверьте креды."

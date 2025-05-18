@@ -25,7 +25,6 @@ export const QuestionDetail = ({
   const [questionText, setQuestionText] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
 
   useEffect(() => {
     if (currentState.question) {
@@ -95,7 +94,7 @@ export const QuestionDetail = ({
         };
 
         recorder.onstop = async () => {
-          const audioBlob = new Blob(chunks, { type: 'audio/ogg' }); // можно webm, но для совместимости возьмем ogg
+          const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
         
           const formData = new FormData();
           formData.append('uploaded_file', audioBlob, 'recording.ogg');
@@ -113,13 +112,11 @@ export const QuestionDetail = ({
             console.error('Error uploading audio:', err);
           }
         
-          setAudioChunks([]);
           stream.getTracks().forEach(track => track.stop());
         };
 
         recorder.start();
         setMediaRecorder(recorder);
-        setAudioChunks(chunks);
         setIsRecording(true);
 
       } catch (err) {
