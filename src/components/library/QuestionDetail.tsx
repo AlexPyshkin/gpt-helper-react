@@ -8,6 +8,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import CheckIcon from "@mui/icons-material/Check";
 import { AppState } from "../../types";
 import { StopRounded, VoiceChat } from "@mui/icons-material";
+import { config } from "../../config";
 
 type CategoriesListProps = {
   currentState: AppState;
@@ -129,10 +130,14 @@ export const QuestionDetail = ({
         
           try {
             setIsProcessing(true);
-            const response = await fetch('http://localhost:9099/transcribe?lang=ru&temperature=0.2&beam_size=5', {
-              method: 'POST',
-              body: formData,
-            });
+            const { lang, temperature, beam_size } = config.transcribe.defaultParams;
+            const response = await fetch(
+              `${config.api.transcribe}?lang=${lang}&temperature=${temperature}&beam_size=${beam_size}`,
+              {
+                method: 'POST',
+                body: formData,
+              }
+            );
         
             const result = await response.json();
             setQuestionText(result.responseBodyBatch[0])
