@@ -17,6 +17,11 @@ export default defineConfig({
         target: 'https://localhost:9094',
         changeOrigin: true,
         secure: false
+      },
+      '/transcribe': {
+        target: 'https://localhost:9099',
+        changeOrigin: true,
+        secure: false
       }
     }
   }
