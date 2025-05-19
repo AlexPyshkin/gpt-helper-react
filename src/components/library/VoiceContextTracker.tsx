@@ -37,7 +37,8 @@ export const VoiceContextTracker = ({
     if (currentVoiceText) {
       getTextContext({
         variables: {
-          inputText: currentVoiceText
+          inputText: currentVoiceText,
+          isFirstQuery: speachContext.length === 0
         }
       });
     }

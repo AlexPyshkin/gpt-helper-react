@@ -10,8 +10,8 @@ export const GET_LIBRARY_CATEGORIES = gql`
 `;
 
 export const GET_TEXT_CONTEXT = gql`
-  query GetTextContext($inputText: String!) {
-    queryToModel(inputText: $inputText)
+  query GetTextContext($inputText: String!, $isFirstQuery: Boolean!) {
+    queryToModel(inputText: $inputText, isFirstQuery: $isFirstQuery)
   }
 `;
 
