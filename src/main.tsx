@@ -1,12 +1,30 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import App from "./App.tsx";
 import './index.css';
 
-const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: '/graphql',
-  cache: new InMemoryCache()
+  credentials: 'include'
+});
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    },
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    },
+    mutate: {
+      errorPolicy: 'all'
+    }
+  }
 });
 
 createRoot(document.getElementById("root")!).render(

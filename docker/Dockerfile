@@ -20,14 +20,20 @@
 # Финальный образ
 FROM nginx:alpine
 
+# Создаем директорию для SSL сертификатов
+RUN mkdir -p /etc/nginx/ssl
+
 # Копируем собранный фронт
-#COPY --from=builder /app/dist /usr/share/nginx/html
 COPY ../dist /usr/share/nginx/html
 
-# Копируем nginx-конфиг если есть
+# Копируем nginx-конфиг
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+# Копируем SSL сертификаты
+COPY docker/config/localhost.pem /etc/nginx/ssl/
+COPY docker/config/localhost-key.pem /etc/nginx/ssl/
+
+EXPOSE 80 443
 
 CMD ["nginx", "-g", "daemon off;"]
 
