@@ -57,13 +57,11 @@ export const VoiceContextTracker = ({
         const recorder = new MediaRecorder(stream);
         const chunks: Blob[] = [];
 
-        recorder.ondataavailable = (e) => {
+        recorder.ondataavailable = async (e) => {
           chunks.push(e.data);
-        };
-
-        recorder.onstop = async () => {
+          
+          // Process the accumulated chunks every 10 seconds
           const audioBlob = new Blob(chunks, { type: 'audio/ogg' });
-        
           const formData = new FormData();
           formData.append('uploaded_file', audioBlob, 'recording.ogg');
         
@@ -95,11 +93,14 @@ export const VoiceContextTracker = ({
           } finally {
             setIsProcessing(false);
           }
-        
+        };
+
+        recorder.onstop = () => {
           stream.getTracks().forEach(track => track.stop());
         };
 
-        recorder.start();
+        // Start recording with 10-second intervals
+        recorder.start(10000);
         setMediaRecorder(recorder);
         setIsRecording(true);
 
@@ -156,16 +157,6 @@ export const VoiceContextTracker = ({
       </Box>
     );
   }
-
-  // if (loading) return <CircularProgress />;
-  // if (error) {
-  //   console.error("Error loading questions:", error.message);
-  //   return <Typography color="error">Error: {error.message}</Typography>;
-  // }
-  
-  // const filteredQuestions = data!.questions
-  //   .filter((q) => q.questionText.toLowerCase().includes(filter.toLowerCase()))
-  //   .sort((a, b) => a.questionText.localeCompare(b.questionText));
 
   return (
     <Box sx={{ 
