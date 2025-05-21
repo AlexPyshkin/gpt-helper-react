@@ -33,6 +33,7 @@ export const Dialog = () => {
     {
       variables: { categoryId: state.category?.id },
       fetchPolicy: 'network-only',
+      skip: !state.category?.id,
     }
   );
 

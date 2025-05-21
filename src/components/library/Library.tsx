@@ -22,6 +22,7 @@ export const Library = () => {
     {
       variables: { categoryId: state.category?.id },
       fetchPolicy: 'network-only',
+      skip: !state.category?.id,
     }
   );
 
