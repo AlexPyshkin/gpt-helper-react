@@ -73,7 +73,7 @@ export const VoiceContextTracker = ({
               {
                 method: 'POST',
                 body: formData,
-                mode: 'no-cors',
+                // mode: 'no-cors',
                 credentials: 'include'
               }
             );
