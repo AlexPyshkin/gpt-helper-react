@@ -24,7 +24,7 @@ FROM nginx:alpine
 RUN mkdir -p /etc/nginx/ssl
 
 # Копируем собранный фронт
-COPY ../dist /usr/share/nginx/html
+COPY dist/ /usr/share/nginx/html/
 
 # Копируем nginx-конфиг
 COPY docker/nginx.conf /etc/nginx/nginx.conf
