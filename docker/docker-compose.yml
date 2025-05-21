@@ -7,7 +7,6 @@ services:
     restart: on-failure
     ports:
       - "80:80"
-      - "5173:443"
     env_file:
       - .env  # Подтягиваем переменные среды из .env
     networks:

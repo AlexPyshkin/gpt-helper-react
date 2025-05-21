@@ -33,7 +33,8 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/config/localhost.pem /etc/nginx/ssl/
 COPY docker/config/localhost-key.pem /etc/nginx/ssl/
 
-EXPOSE 80 443
+EXPOSE 80
+#EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
 

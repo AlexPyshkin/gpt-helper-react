@@ -88,3 +88,9 @@ export const UPDATE_ANSWER = gql`
     }
   }
 `;
+
+export const TRANSCRIBE_AUDIO = gql`
+  mutation TranscribeAudio($audioData: Upload!, $params: TranscriptionParamsInput!) {
+    transcribeAudio(audioData: $audioData, params: $params)
+  }
+`;

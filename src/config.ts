@@ -1,7 +1,7 @@
 export const config = {
   api: {
     graphql: '/graphql',
-    transcribe: '/transcribe'
+    transcribe: 'http://localhost:9099/transcribe'
   },
   transcribe: {
     defaultParams: {
