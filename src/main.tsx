@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink, from } from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
+import { setContext } from '@apollo/client/link/context';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from "./App.tsx";
 import './index.css';
@@ -27,8 +28,18 @@ const httpLink = createHttpLink({
   credentials: 'include'
 });
 
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  };
+});
+
 const client = new ApolloClient({
-  link: from([errorLink, httpLink]),
+  link: from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {

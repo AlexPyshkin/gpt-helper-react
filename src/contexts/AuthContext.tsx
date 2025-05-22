@@ -1,16 +1,77 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { AuthContextType, User } from '../graphql/types';
+import { gql, useApolloClient } from '@apollo/client';
+
+const TOKEN_EXPIRY_KEY = 'tokenExpiry';
+const TOKEN_KEY = 'token';
+
+const GET_CURRENT_USER = gql`
+  query GetCurrentUser {
+    me {
+      id
+      email
+      name
+    }
+  }
+`;
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const client = useApolloClient();
+
+  const setTokenWithExpiry = (token: string) => {
+    const expiryTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours from now
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
+  };
+
+  const isTokenValid = () => {
+    const expiryTime = localStorage.getItem(TOKEN_EXPIRY_KEY);
+    if (!expiryTime) return false;
+    return new Date().getTime() < parseInt(expiryTime);
+  };
+
+  const restoreSession = async () => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token || !isTokenValid()) {
+      setUser(null);
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(TOKEN_EXPIRY_KEY);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { data } = await client.query({
+        query: GET_CURRENT_USER,
+        fetchPolicy: 'no-cache'
+      });
+
+      if (data?.me) {
+        setUser(data.me);
+      } else {
+        throw new Error('No user data received');
+      }
+    } catch (error) {
+      console.error('Session restoration error:', error);
+      setUser(null);
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(TOKEN_EXPIRY_KEY);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    restoreSession();
+  }, []);
 
   const login = async (emailOrProvider: string, password?: string) => {
     try {
       if (emailOrProvider === 'google') {
-        // Google OAuth is handled by the GoogleLogin component
-        // This function will be called with the credential from GoogleLogin
         if (!password) {
           throw new Error('No Google credential provided');
         }
@@ -50,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         setUser(data.data.loginWithGoogle.user);
-        localStorage.setItem('token', data.data.loginWithGoogle.token);
+        setTokenWithExpiry(data.data.loginWithGoogle.token);
         return;
       }
 
@@ -90,7 +151,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setUser(data.data.login.user);
-      localStorage.setItem('token', data.data.login.token);
+      setTokenWithExpiry(data.data.login.token);
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -136,7 +197,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setUser(data.data.register.user);
-      localStorage.setItem('token', data.data.register.token);
+      setTokenWithExpiry(data.data.register.token);
     } catch (error) {
       console.error('Registration error:', error);
       throw error;
@@ -145,8 +206,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('token');
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_EXPIRY_KEY);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated: !!user }}>
