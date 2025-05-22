@@ -2,8 +2,15 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink, from } from '@apollo/client';
 import { onError } from "@apollo/client/link/error";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from "./App.tsx";
 import './index.css';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+if (!GOOGLE_CLIENT_ID) {
+  throw new Error('VITE_GOOGLE_CLIENT_ID is not defined');
+}
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -40,8 +47,10 @@ const client = new ApolloClient({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </StrictMode>,
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </GoogleOAuthProvider>
+  </StrictMode>
 );
