@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Library } from './components/library/Library';
 import { Dialog } from './components/dialog/Dialog';
@@ -15,7 +15,13 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+  const location = useLocation();
+
+  return isAuthenticated ? (
+    <>{children}</>
+  ) : (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
 };
 
 function AppContent() {

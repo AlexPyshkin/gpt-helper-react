@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   TextField,
@@ -10,29 +11,60 @@ import {
   Link,
   Divider,
 } from '@mui/material';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
     try {
       await login(email, password);
+      const from = location.state?.from?.pathname || '/library';
+      navigate(from);
     } catch (err) {
       setError('Неверный email или пароль');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
-    try {
-      await login('google', credentialResponse.credential);
-    } catch (err) {
-      setError('Ошибка авторизации через Google');
+    console.log('Google OAuth response:', credentialResponse);
+    
+    if (!credentialResponse?.credential) {
+      console.error('No credential in Google response');
+      setError('Не удалось получить данные от Google');
+      return;
     }
+
+    setIsLoading(true);
+    setError('');
+    try {
+      console.log('Attempting to login with Google credential');
+      await login('google', credentialResponse.credential);
+      console.log('Google login successful');
+      const from = location.state?.from?.pathname || '/library';
+      navigate(from);
+    } catch (err) {
+      console.error('Google login error:', err);
+      setError('Ошибка авторизации через Google');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleError = (error: any) => {
+    console.error('Google OAuth error:', error);
+    setError('Ошибка авторизации через Google');
   };
 
   return (
@@ -76,6 +108,7 @@ export const LoginForm = () => {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
           />
           <TextField
             margin="normal"
@@ -88,27 +121,27 @@ export const LoginForm = () => {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isLoading}
           >
-            Войти
+            {isLoading ? 'Вход...' : 'Войти'}
           </Button>
           <Divider sx={{ my: 2 }}>или</Divider>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => {
-                setError('Ошибка авторизации через Google');
-              }}
+              onError={() => handleGoogleError(new Error('Google OAuth failed'))}
               useOneTap
             />
           </Box>
           <Box sx={{ textAlign: 'center' }}>
-            <Link href="/register" variant="body2">
+            <Link href="/register" variant="body2" sx={{ pointerEvents: isLoading ? 'none' : 'auto' }}>
               Нет аккаунта? Зарегистрироваться
             </Link>
           </Box>
