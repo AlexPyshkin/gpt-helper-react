@@ -8,6 +8,7 @@ import { GET_QUESTIONS_BY_CATEGORY } from '../../graphql/queries';
 import type { AppState, Category, Question, Answer } from '../../types';
 import type { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../../graphql/types';
 import { Box } from '@mui/material';
+import { TagList } from '../tags/TagList';
 
 export const Library = () => {
   const [state, setState] = useState<AppState>({
@@ -79,6 +80,20 @@ export const Library = () => {
       >
         <QuestionsList currentState={state} onSelectQuestion={handleQuestionSelect} setAnswerForQuestion={handleAnswerUpdate} />
         <AnswerDetail currentState={state} />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '20%',
+          height: '100%',
+        }}
+      >
+      <TagList
+          currentState={state}
+          variant="dialog" >
+        
+      </TagList>
       </Box>
     </Box>
   );

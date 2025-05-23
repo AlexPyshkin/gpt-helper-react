@@ -119,7 +119,7 @@ export const Dialog = () => {
       >
       <VoiceContextTracker
           currentState={state}
-          variant="dialog" >
+          variant="library" >
         
       </VoiceContextTracker>
       </Box>
