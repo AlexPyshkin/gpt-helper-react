@@ -64,7 +64,7 @@ export const LoginForm = () => {
 
   const handleGoogleError = (error: any) => {
     console.error('Google OAuth error:', error);
-    setError('Ошибка авторизации через Google');
+    setError('Ошибка авторизации через Google. Пожалуйста, попробуйте еще раз.');
   };
 
   return (
@@ -137,7 +137,7 @@ export const LoginForm = () => {
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => handleGoogleError(new Error('Google OAuth failed'))}
-              useOneTap
+              useOneTap={false}
             />
           </Box>
           <Box sx={{ textAlign: 'center' }}>

@@ -2,9 +2,12 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 import { AuthContextType, User } from '../graphql/types';
 import { gql, useApolloClient } from '@apollo/client';
 
+// Constants
 const TOKEN_EXPIRY_KEY = 'tokenExpiry';
 const TOKEN_KEY = 'token';
+const TOKEN_EXPIRY_TIME = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
 
+// GraphQL Operations
 const GET_CURRENT_USER = gql`
   query GetCurrentUser {
     me {
@@ -15,6 +18,102 @@ const GET_CURRENT_USER = gql`
   }
 `;
 
+const LOGIN_WITH_GOOGLE = gql`
+  mutation LoginWithGoogle($credential: String!) {
+    loginWithGoogle(credential: $credential) {
+      user {
+        id
+        email
+        name
+      }
+      token
+    }
+  }
+`;
+
+const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      user {
+        id
+        email
+        name
+      }
+      token
+    }
+  }
+`;
+
+const REGISTER = gql`
+  mutation Register($email: String!, $password: String!, $name: String!) {
+    register(email: $email, password: $password, name: $name) {
+      user {
+        id
+        email
+        name
+      }
+      token
+    }
+  }
+`;
+
+// Types
+interface AuthResponse {
+  user: User;
+  token: string;
+}
+
+interface ApiError {
+  message: string;
+}
+
+// Token Management
+const tokenManager = {
+  setToken: (token: string) => {
+    const expiryTime = new Date().getTime() + TOKEN_EXPIRY_TIME;
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
+  },
+
+  getToken: () => localStorage.getItem(TOKEN_KEY),
+
+  isTokenValid: () => {
+    const expiryTime = localStorage.getItem(TOKEN_EXPIRY_KEY);
+    if (!expiryTime) return false;
+    return new Date().getTime() < parseInt(expiryTime);
+  },
+
+  clearToken: () => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(TOKEN_EXPIRY_KEY);
+  }
+};
+
+// API Service
+const authApi = {
+  async fetchGraphQL<T>(query: string, variables?: Record<string, any>): Promise<T> {
+    const response = await fetch('/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      throw new Error('Network request failed');
+    }
+
+    const data = await response.json();
+    if (data.errors) {
+      throw new Error(data.errors[0].message);
+    }
+
+    return data.data;
+  }
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -22,24 +121,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const client = useApolloClient();
 
-  const setTokenWithExpiry = (token: string) => {
-    const expiryTime = new Date().getTime() + 6 * 60 * 60 * 1000; // 6 hours from now
-    localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString());
-  };
-
-  const isTokenValid = () => {
-    const expiryTime = localStorage.getItem(TOKEN_EXPIRY_KEY);
-    if (!expiryTime) return false;
-    return new Date().getTime() < parseInt(expiryTime);
-  };
-
   const restoreSession = async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (!token || !isTokenValid()) {
+    const token = tokenManager.getToken();
+    if (!token || !tokenManager.isTokenValid()) {
       setUser(null);
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(TOKEN_EXPIRY_KEY);
+      tokenManager.clearToken();
       setIsLoading(false);
       return;
     }
@@ -58,8 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Session restoration error:', error);
       setUser(null);
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(TOKEN_EXPIRY_KEY);
+      tokenManager.clearToken();
     } finally {
       setIsLoading(false);
     }
@@ -75,83 +160,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!password) {
           throw new Error('No Google credential provided');
         }
-        
-        const response = await fetch('/graphql', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: `
-              mutation LoginWithGoogle($credential: String!) {
-                loginWithGoogle(credential: $credential) {
-                  user {
-                    id
-                    email
-                    name
-                  }
-                  token
-                }
-              }
-            `,
-            variables: {
-              credential: password
-            }
-          }),
-          credentials: 'include'
-        });
 
-        if (!response.ok) {
-          throw new Error('Login failed');
-        }
+        const data = await authApi.fetchGraphQL<{ loginWithGoogle: AuthResponse }>(
+          LOGIN_WITH_GOOGLE.loc?.source.body || '',
+          { credential: password }
+        );
 
-        const data = await response.json();
-        if (data.errors) {
-          throw new Error(data.errors[0].message);
-        }
-
-        setUser(data.data.loginWithGoogle.user);
-        setTokenWithExpiry(data.data.loginWithGoogle.token);
+        setUser(data.loginWithGoogle.user);
+        tokenManager.setToken(data.loginWithGoogle.token);
         return;
       }
 
-      const response = await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
-            mutation Login($email: String!, $password: String!) {
-              login(email: $email, password: $password) {
-                user {
-                  id
-                  email
-                  name
-                }
-                token
-              }
-            }
-          `,
-          variables: {
-            email: emailOrProvider,
-            password
-          }
-        }),
-        credentials: 'include'
-      });
+      const data = await authApi.fetchGraphQL<{ login: AuthResponse }>(
+        LOGIN.loc?.source.body || '',
+        { email: emailOrProvider, password }
+      );
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
-      if (data.errors) {
-        throw new Error(data.errors[0].message);
-      }
-
-      setUser(data.data.login.user);
-      setTokenWithExpiry(data.data.login.token);
+      setUser(data.login.user);
+      tokenManager.setToken(data.login.token);
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -160,44 +186,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (email: string, password: string, name: string) => {
     try {
-      const response = await fetch('/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
-            mutation Register($email: String!, $password: String!, $name: String!) {
-              register(email: $email, password: $password, name: $name) {
-                user {
-                  id
-                  email
-                  name
-                }
-                token
-              }
-            }
-          `,
-          variables: {
-            email,
-            password,
-            name
-          }
-        }),
-        credentials: 'include'
-      });
+      const data = await authApi.fetchGraphQL<{ register: AuthResponse }>(
+        REGISTER.loc?.source.body || '',
+        { email, password, name }
+      );
 
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-
-      const data = await response.json();
-      if (data.errors) {
-        throw new Error(data.errors[0].message);
-      }
-
-      setUser(data.data.register.user);
-      setTokenWithExpiry(data.data.register.token);
+      setUser(data.register.user);
+      tokenManager.setToken(data.register.token);
     } catch (error) {
       console.error('Registration error:', error);
       throw error;
@@ -206,8 +201,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(TOKEN_EXPIRY_KEY);
+    tokenManager.clearToken();
   };
 
   if (isLoading) {
