@@ -63,10 +63,6 @@ interface AuthResponse {
   token: string;
 }
 
-interface ApiError {
-  message: string;
-}
-
 // Token Management
 const tokenManager = {
   setToken: (token: string) => {

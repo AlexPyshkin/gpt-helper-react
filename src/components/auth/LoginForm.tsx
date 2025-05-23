@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -11,7 +11,7 @@ import {
   Link,
   Divider,
 } from '@mui/material';
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
