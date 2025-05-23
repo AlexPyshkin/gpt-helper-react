@@ -1,67 +1,12 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { AuthContextType, User } from '../graphql/types';
-import { gql, useApolloClient } from '@apollo/client';
+import { GET_CURRENT_USER, LOGIN_WITH_GOOGLE, LOGIN, REGISTER } from '../graphql/queries';
+import { useApolloClient } from '@apollo/client';
 
 // Constants
 const TOKEN_EXPIRY_KEY = 'tokenExpiry';
 const TOKEN_KEY = 'token';
 const TOKEN_EXPIRY_TIME = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
-
-// GraphQL Operations
-const GET_CURRENT_USER = gql`
-  query GetCurrentUser {
-    me {
-      id
-      email
-      name
-    }
-  }
-`;
-
-const LOGIN_WITH_GOOGLE = gql`
-  mutation LoginWithGoogle($credential: String!) {
-    loginWithGoogle(credential: $credential) {
-      user {
-        id
-        email
-        name
-      }
-      token
-    }
-  }
-`;
-
-const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      user {
-        id
-        email
-        name
-      }
-      token
-    }
-  }
-`;
-
-const REGISTER = gql`
-  mutation Register($email: String!, $password: String!, $name: String!) {
-    register(email: $email, password: $password, name: $name) {
-      user {
-        id
-        email
-        name
-      }
-      token
-    }
-  }
-`;
-
-// Types
-interface AuthResponse {
-  user: User;
-  token: string;
-}
 
 // Token Management
 const tokenManager = {

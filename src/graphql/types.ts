@@ -62,6 +62,7 @@ export interface UpdateQuestionMutation {
     answer: Answer;
   };
 }
+
 export interface UpdateQuestionMutationVariables {
   id: string;
   questionText: string;
@@ -75,7 +76,6 @@ export interface UpdateAnswerMutationVariables {
   answerId: string;
   answerText: string;
 }
-
 
 // User and auth
 
@@ -91,4 +91,9 @@ export interface AuthContextType {
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
 }

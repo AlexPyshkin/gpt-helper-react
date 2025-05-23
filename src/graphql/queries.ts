@@ -94,3 +94,52 @@ export const TRANSCRIBE_AUDIO = gql`
     transcribeAudio(audioData: $audioData, params: $params)
   }
 `;
+
+export const GET_CURRENT_USER = gql`
+  query GetCurrentUser {
+    me {
+      id
+      email
+      name
+    }
+  }
+`;
+
+export const LOGIN_WITH_GOOGLE = gql`
+  mutation LoginWithGoogle($credential: String!) {
+    loginWithGoogle(credential: $credential) {
+      user {
+        id
+        email
+        name
+      }
+      token
+    }
+  }
+`;
+
+export const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      user {
+        id
+        email
+        name
+      }
+      token
+    }
+  }
+`;
+
+export const REGISTER = gql`
+  mutation Register($email: String!, $password: String!, $name: String!) {
+    register(email: $email, password: $password, name: $name) {
+      user {
+        id
+        email
+        name
+      }
+      token
+    }
+  }
+`;
