@@ -5,6 +5,7 @@ export const GET_LIBRARY_CATEGORIES = gql`
     categories: libraryCategories {
       id
       name
+      parentId
     }
   }
 `;
