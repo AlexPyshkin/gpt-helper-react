@@ -91,7 +91,6 @@ export const Library = () => {
           flexDirection: 'column',
           width: '20%',
           height: '100%',
-          visibility: false
         }}
       >
       <TagList
