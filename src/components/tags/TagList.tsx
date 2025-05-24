@@ -94,21 +94,23 @@ export const TagList = ({
       <Typography variant="h6" sx={{ mb: 2 }}>
         Теги
       </Typography>
-      <TextField
-        label="Поиск по тегам"
-        variant="outlined"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <IconButton
-        onClick={handleUpdateTags}
-        color="primary"
-        // disabled={isCommitDisabled}
-      >
-        <Save />
-      </IconButton>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+        <TextField
+          label="Поиск по тегам"
+          variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          size="small"
+          sx={{ flexGrow: 1 }}
+        />
+        <IconButton
+          onClick={handleUpdateTags}
+          color="primary"
+        >
+          <Save />
+        </IconButton>
+      </Stack>
+      <Stack direction="row" flexWrap="wrap" useFlexGap>
         {displayTags.map((tag) => (
           <Chip
             key={tag.id}
@@ -117,7 +119,7 @@ export const TagList = ({
             color={
               selectedTags.some((t) => t.id === tag.id) ? "primary" : "default"
             }
-            sx={{ m: 0.5 }}
+            sx={{ m: 0.2 }}
           />
         ))}
       </Stack>
