@@ -35,6 +35,10 @@ export const Library = () => {
     setState({ ...state, question, loadingAnswer: true });
   };
 
+  const handleUpdateTags = (question: Question) => {
+    setState({ ...state, question, loadingAnswer: false });
+  };
+
   const handleAnswerUpdate = (answer: Answer | null) => {
     setState({ ...state, answer, loadingAnswer: false });
   };
@@ -91,9 +95,8 @@ export const Library = () => {
       >
       <TagList
           currentState={state}
-          variant="dialog" >
-        
-      </TagList>
+          onUpadeTagsQuestion={handleUpdateTags}
+          variant="library" />
       </Box>
     </Box>
   );
