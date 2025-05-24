@@ -23,13 +23,12 @@ import { useSnackbar } from "notistack";
 interface TagListProps {
   currentState: AppState;
   onUpadeTagsQuestion: (newState: Question) => void;
-  variant?: "library" | "dialog";
+  // variant?: "library" | "dialog";
 }
 
 export const TagList = ({
   currentState,
   onUpadeTagsQuestion,
-  variant = "library",
 }: TagListProps) => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     currentState.question?.tags ?? []

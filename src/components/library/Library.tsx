@@ -96,7 +96,7 @@ export const Library = () => {
       <TagList
           currentState={state}
           onUpadeTagsQuestion={handleUpdateTags}
-          variant="library" />
+          />
       </Box>)}
     </Box>
   );

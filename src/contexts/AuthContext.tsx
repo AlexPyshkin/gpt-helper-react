@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { AuthContextType, User } from '../graphql/types';
+import { AuthContextType, User, AuthResponse } from '../graphql/types';
 import { GET_CURRENT_USER, LOGIN_WITH_GOOGLE, LOGIN, REGISTER } from '../graphql/queries';
 import { useApolloClient } from '@apollo/client';
 
