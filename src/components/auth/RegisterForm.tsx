@@ -40,7 +40,7 @@ export const RegisterForm = () => {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'background.paper',
       }}
     >
       <Paper

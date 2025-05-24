@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <Box 
       sx={{ 
-        backgroundColor: '#f8f8f8', 
+        backgroundColor: 'background.paper',
         padding: '6px',
         textAlign: 'center' 
       }}

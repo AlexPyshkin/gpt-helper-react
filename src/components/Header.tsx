@@ -1,12 +1,14 @@
 import { AppBar, Toolbar, Typography, IconButton, Box, Button, Menu, MenuItem } from '@mui/material';
-import { AccountCircle, Login } from '@mui/icons-material';
+import { AccountCircle, Login, Brightness4, Brightness7 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import reactLogo from '/src/assets/react.svg';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
 
 export const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -49,7 +51,11 @@ export const Header = () => {
           </Button>
         </Box>
 
-        <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <IconButton color="inherit" onClick={toggleTheme}>
+            {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
+          
           {isAuthenticated ? (
             <>
               <IconButton

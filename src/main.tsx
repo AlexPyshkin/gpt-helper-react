@@ -6,6 +6,7 @@ import { setContext } from '@apollo/client/link/context';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from "./App.tsx";
 import './index.css';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -60,7 +61,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <ApolloProvider client={client}>
-        <App />
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
       </ApolloProvider>
     </GoogleOAuthProvider>
   </StrictMode>

@@ -121,7 +121,7 @@ export const CategoriesList = ({onSelectCategory, currentState}: CategoriesListP
                 borderRadius: '8px',
                 padding: '6px',
                 margin: '6px',
-                backgroundColor: '#f9f9f9',
+                backgroundColor: 'background.paper',
                 minHeight: '50px',
                 height: '70%',
                 overflowY: 'auto',

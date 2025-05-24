@@ -104,7 +104,7 @@ export const QuestionsList = ({
         border: '1px solid #ccc',
         borderRadius: '8px',
         margin: '6px',
-        bgcolor: '#f9f9f9',
+        backgroundColor: 'background.paper',
         overflow: 'auto'
       }}>
         <Typography variant="h6" align="center">
@@ -130,7 +130,7 @@ export const QuestionsList = ({
       border: '1px solid #ccc',
       borderRadius: '8px',
       margin: '6px',
-      bgcolor: '#f9f9f9',
+      backgroundColor: 'background.paper',
       overflowY: 'auto'
     }}>
       <TextField

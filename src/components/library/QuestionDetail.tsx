@@ -180,7 +180,7 @@ export const QuestionDetail = ({
         borderRadius: '8px',
         padding: '6px',
         margin: '6px',
-        backgroundColor: '#f9f9f9',
+        backgroundColor: 'background.paper',
         overflow: 'auto',
         ...styles.container[variant]
       }}
