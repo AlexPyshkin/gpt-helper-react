@@ -85,19 +85,20 @@ export const Library = () => {
         <QuestionsList currentState={state} onSelectQuestion={handleQuestionSelect} setAnswerForQuestion={handleAnswerUpdate} />
         <AnswerDetail currentState={state} />
       </Box>
-      <Box
+      {state.question && (<Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
           width: '20%',
           height: '100%',
+          visibility: false
         }}
       >
       <TagList
           currentState={state}
           onUpadeTagsQuestion={handleUpdateTags}
           variant="library" />
-      </Box>
+      </Box>)}
     </Box>
   );
 };
