@@ -9,9 +9,15 @@ export interface Category {
   name: string;
 }
 
+export interface Tag {
+  id: string;
+  name: string;
+}
+
 export interface Question {
   id: string;
   questionText: string;
+  tags: Tag[];
 }
 
 export interface Answer {
@@ -19,10 +25,18 @@ export interface Answer {
   answerText: string;
 }
 
+// Tags
+// GET_TAGS
+export interface GetTagsQuery {
+  tags: Tag[];
+}
+
+// Categories
 // GET_CATEGORIES
 export interface GetCategoriesQuery {
   categories: Category[];
 }
+
 export interface GetCategoriesQueryVariables {}
 
 // GET_QUESTIONS_BY_CATEGORY
@@ -49,6 +63,7 @@ export interface CreateQuestionMutation {
     answer: Answer;
   };
 }
+
 export interface CreateQuestionMutationVariables {
   questionText: string;
   categoryId: string;
@@ -72,9 +87,20 @@ export interface UpdateQuestionMutationVariables {
 export interface UpdateAnswerMutation {
   updateAnswer: Answer;
 }
+
 export interface UpdateAnswerMutationVariables {
   answerId: string;
   answerText: string;
+}
+
+// UPDATE_TAGS
+export interface UpdateTagsMutation {
+  updateTags: Question;
+}
+
+export interface UpdateTagsMutationVariables {
+  questionId: string;
+  tags: [Tag];
 }
 
 // User and auth
@@ -97,3 +123,4 @@ export interface AuthResponse {
   user: User;
   token: string;
 }
+

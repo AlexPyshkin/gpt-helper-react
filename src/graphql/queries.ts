@@ -10,6 +10,15 @@ export const GET_LIBRARY_CATEGORIES = gql`
   }
 `;
 
+export const GET_TAGS = gql`
+  query GetTags {
+    tags: getTags {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_TEXT_CONTEXT = gql`
   query GetTextContext($inputText: String!, $isFirstQuery: Boolean!) {
     queryToModel(inputText: $inputText, isFirstQuery: $isFirstQuery)
@@ -30,6 +39,10 @@ export const GET_QUESTIONS_BY_CATEGORY = gql`
     questions(categoryId: $categoryId) {
       id
       questionText
+      tags {
+        id
+        name
+      }
     }
   }
 `;
@@ -53,6 +66,10 @@ export const CREATE_QUESTION = gql`
       question {
         id
         questionText
+        tags {
+          id
+          name
+        }
       }
       answer {
         id
@@ -72,6 +89,33 @@ export const UPDATE_QUESTION = gql`
       question {
         id
         questionText
+        tags {
+          id
+          name
+        }
+      }
+      answer {
+        id
+        answerText
+      }
+    }
+  }
+`;
+
+export const UPDATE_QUESTION_TAGS = gql`
+  mutation UpdateQuestionTags($questionId: ID!, $tags: [TagInput!]!) {
+    newState: updateQuestionTags(questionId: $questionId, tags: $tags) {
+      category {
+        id
+        name
+      }
+      question {
+        id
+        questionText
+        tags {
+          id
+          name
+        }
       }
       answer {
         id

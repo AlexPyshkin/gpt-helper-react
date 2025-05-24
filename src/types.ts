@@ -1,4 +1,9 @@
 // src/types.ts
+export interface Tag {
+    id: string;
+    name: string;
+}
+
 export interface Category {
     id: string;
     name: string;
@@ -9,14 +14,12 @@ export interface Category {
 export interface Question {
     id: string;
     questionText: string;
-    // …other fields
+    tags: Tag[];
 }
 
 export interface Answer {
     id: string;
-    // content: string;
     answerText: string;
-    // …other fields
 }
 
 export interface AppState {

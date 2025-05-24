@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { SnackbarProvider } from 'notistack';
 import './App.css';
 
 interface ProtectedRouteProps {
@@ -63,9 +64,18 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <SnackbarProvider 
+      maxSnack={3}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
+      autoHideDuration={3000}
+    >
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </SnackbarProvider>
   );
 }
 
