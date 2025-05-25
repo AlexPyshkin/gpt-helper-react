@@ -9,6 +9,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import { AppState } from "../../types";
 import { StopRounded, VoiceChat } from "@mui/icons-material";
 import { config } from "../../config";
+import { StyledTextareaAutosize } from "../../styles/TextareaAutosize.styles";
 
 type CategoriesListProps = {
   currentState: AppState;
@@ -185,7 +186,7 @@ export const QuestionDetail = ({
         ...styles.container[variant]
       }}
     >
-      <TextareaAutosize
+      <StyledTextareaAutosize
         minRows={styles.textarea[variant].minRows}
         placeholder={
           isNewDisabled

@@ -78,7 +78,7 @@ export const darkTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#2d2d2d',
           backgroundImage: 'none',
         },
       },
@@ -86,7 +86,7 @@ export const darkTheme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#2d2d2d',
           backgroundImage: 'none',
         },
       },
@@ -94,7 +94,7 @@ export const darkTheme = createTheme({
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#2d2d2d',
           backgroundImage: 'none',
         },
       },
@@ -102,7 +102,7 @@ export const darkTheme = createTheme({
     MuiMenu: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#2d2d2d',
           backgroundImage: 'none',
         },
       },
@@ -110,7 +110,7 @@ export const darkTheme = createTheme({
     MuiPopover: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#2d2d2d',
           backgroundImage: 'none',
         },
       },

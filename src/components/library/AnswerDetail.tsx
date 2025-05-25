@@ -10,6 +10,8 @@ import type { ChangeEvent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { StyledTextareaAutosize } from '../../styles/TextareaAutosize.styles';
+import { StyledReactMarkdown } from '../../styles/ReactMarkdown.styles';
 
 type AnswerDetailProps = {
   currentState: AppState;
@@ -95,7 +97,7 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
       ) : (
         <>
           {editMode ? (
-            <TextareaAutosize
+            <StyledTextareaAutosize
               minRows={styles.textarea[variant].minRows}
               value={answerText}
               onChange={handleInputChange}
@@ -109,9 +111,9 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
             />
           ) : (
             <div className="markdown-body" style={{ width: '99%' }}>
-              <ReactMarkdown>
+              <StyledReactMarkdown>
                 {answerText}
-              </ReactMarkdown>
+              </StyledReactMarkdown>
             </div>
           )}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '99%' }}>
