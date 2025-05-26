@@ -105,6 +105,7 @@ export const Dialog = () => {
           currentState={state} 
           refetchQuestions={refetchQuestionsAndSetSelected} 
           setAnswerLoadingState={setLoadingAnswer}
+          questionTypeParam='SHORT_DIALOG'
           updateMode={false}
           variant="dialog"
         />

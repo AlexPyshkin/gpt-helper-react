@@ -20,8 +20,8 @@ export const GET_TAGS = gql`
 `;
 
 export const GET_TEXT_CONTEXT = gql`
-  query GetTextContext($inputText: String!, $isFirstQuery: Boolean!) {
-    queryToModel(inputText: $inputText, isFirstQuery: $isFirstQuery)
+  query GetTextContext($inputText: String!, $questionType: String) {
+    queryToModel(inputText: $inputText, questionType: $questionType)
   }
 `;
 
@@ -57,8 +57,8 @@ export const GET_ANSWER_BY_QUESTION = gql`
 `;
 
 export const CREATE_QUESTION = gql`
-  mutation CreateQuestion($questionText: String!, $categoryId: ID!) {
-    createQuestion(questionText: $questionText, categoryId: $categoryId) {
+  mutation CreateQuestion($questionText: String!, $categoryId: ID!, $questionType: String) {
+    createQuestion(questionText: $questionText, categoryId: $categoryId, questionType: $questionType) {
       category {
         id
         name
@@ -80,8 +80,8 @@ export const CREATE_QUESTION = gql`
 `;
 
 export const UPDATE_QUESTION = gql`
-  mutation UpdateQuestion($id: ID!, $questionText: String!) {
-    updateQuestion(id: $id, questionText: $questionText) {
+  mutation UpdateQuestion($id: ID!, $questionText: String!, $questionType: String) {
+    updateQuestion(id: $id, questionText: $questionText, questionType: $questionType) {
       category {
         id
         name
