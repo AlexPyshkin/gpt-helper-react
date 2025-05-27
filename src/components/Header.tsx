@@ -27,39 +27,39 @@ export const Header = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
+    <AppBar position="static" sx={{ minHeight: '48px' }}>
+      <Toolbar sx={{ minHeight: '48px !important' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
             <img 
               src={reactLogo}
               alt="Logo" 
-              style={{ height: '40px', marginRight: '16px' }} 
+              style={{ height: '28px', marginRight: '12px' }} 
             />
-            <Typography variant="h6" component="div">
+            <Typography variant="subtitle1" component="div">
               GPT Helper
             </Typography>
           </Link>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 2, marginRight: 2 }}>
-          <Button color="inherit" component={Link} to="/library">
+        <Box sx={{ display: 'flex', gap: 1, marginRight: 1 }}>
+          <Button color="inherit" component={Link} to="/library" size="small">
             Библиотека
           </Button>
-          <Button color="inherit" component={Link} to="/dialog">
+          <Button color="inherit" component={Link} to="/dialog" size="small">
             Диалог
           </Button>
         </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <IconButton color="inherit" onClick={toggleTheme}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <IconButton color="inherit" onClick={toggleTheme} size="small">
             {isDarkMode ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
           
           {isAuthenticated ? (
             <>
               <IconButton
-                size="large"
+                size="small"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
@@ -93,6 +93,7 @@ export const Header = () => {
               component={Link}
               to="/login"
               startIcon={<Login />}
+              size="small"
             >
               Войти
             </Button>

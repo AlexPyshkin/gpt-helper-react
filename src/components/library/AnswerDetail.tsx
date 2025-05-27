@@ -1,5 +1,4 @@
 import {Box, CircularProgress, IconButton} from '@mui/material';
-import TextareaAutosize from 'react-textarea-autosize';
 import {useEffect, useState} from 'react';
 import UndoIcon from '@mui/icons-material/Undo';
 import CheckIcon from '@mui/icons-material/Check';
@@ -7,7 +6,6 @@ import {useMutation} from '@apollo/client';
 import {UPDATE_ANSWER} from '../../graphql/queries';
 import type { AppState } from '../../types';
 import type { ChangeEvent } from 'react';
-import ReactMarkdown from 'react-markdown';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { StyledTextareaAutosize } from '../../styles/TextareaAutosize.styles';
@@ -27,8 +25,8 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
   const styles = {
     container: {
       library: {
-        minHeight: '30%',
-        height: '30%',
+        minHeight: '50%',
+        height: '50%',
       },
       dialog: {
         minHeight: '50%',
