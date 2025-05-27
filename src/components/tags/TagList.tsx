@@ -38,6 +38,7 @@ export const TagList = ({
   const [updateTags] = useMutation(UPDATE_QUESTION_TAGS);
   const [filteredTags, setFilteredTags] = useState<Tag[]>(data?.tags ?? []);
   const { enqueueSnackbar } = useSnackbar();
+  const [hasChanges, setHasChanges] = useState(false);
 
   const handleTagClick = (tag: Tag) => {
     setSelectedTags((prevTags) => {
@@ -79,6 +80,14 @@ export const TagList = ({
     setSelectedTags(currentState.question?.tags ?? []);
   }, [currentState]);
 
+  useEffect(() => {
+    const originalTags = currentState.question?.tags ?? [];
+    const hasTagsChanged = 
+      selectedTags.length !== originalTags.length ||
+      selectedTags.some(tag => !originalTags.some(origTag => origTag.id === tag.id));
+    setHasChanges(hasTagsChanged);
+  }, [selectedTags, currentState.question?.tags]);
+
   const displayTags = [
     ...selectedTags,
     ...filteredTags.filter(
@@ -106,6 +115,7 @@ export const TagList = ({
         <IconButton
           onClick={handleUpdateTags}
           color="primary"
+          disabled={!hasChanges}
         >
           <Save />
         </IconButton>
