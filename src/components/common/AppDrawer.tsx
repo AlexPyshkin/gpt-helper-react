@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  ListItemButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -18,11 +19,32 @@ import PersonIcon from "@mui/icons-material/Person";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useAppContext } from "../../context/AppContext";
 import { useAuth } from "../../contexts/AuthContext";
+import { useLanguage } from "../../contexts/LanguageContext";
+
+const translations = {
+  ru: {
+    settings: "Настройки",
+    editMode: "Режим редактирования",
+    language: "Язык",
+    russian: "Русский",
+    english: "English",
+  },
+  en: {
+    settings: "Settings",
+    editMode: "Edit Mode",
+    language: "Language",
+    russian: "Русский",
+    english: "English",
+  },
+};
 
 export const AppDrawer = () => {
   const { state, dispatch } = useAppContext();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const { language, toggleLanguage } = useLanguage();
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const t = translations[language];
 
   const handleEditModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'SET_FILTERS', payload: { editMode: event.target.checked } });
@@ -55,7 +77,7 @@ export const AppDrawer = () => {
       }}>
         {drawerOpen && (
           <Typography variant="subtitle2" sx={{ ml: 1 }}>
-            Настройки
+            {t.settings}
           </Typography>
         )}
         <IconButton 
@@ -75,19 +97,19 @@ export const AppDrawer = () => {
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText 
-                primary={state.user?.username || 'Гость'} 
-                secondary="Пользователь"
+                primary={user?.name || 'Гость'} 
+                secondary={user?.email}
               />
             </ListItem>
-            <ListItem>
+            <ListItemButton onClick={toggleLanguage}>
               <ListItemIcon>
                 <LanguageIcon />
               </ListItemIcon>
               <ListItemText 
-                primary="Русский" 
-                secondary="Язык"
+                primary={language === 'ru' ? t.russian : t.english} 
+                secondary={t.language}
               />
-            </ListItem>
+            </ListItemButton>
           </List>
           <Divider sx={{ my: 2 }} />
           <FormControlLabel
@@ -99,7 +121,7 @@ export const AppDrawer = () => {
                 size="small"
               />
             }
-            label="Режим редактирования"
+            label={t.editMode}
             sx={{
               m: 0,
               "& .MuiFormControlLabel-label": {

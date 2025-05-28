@@ -11,6 +11,7 @@ import { SnackbarProvider } from 'notistack';
 import './App.css';
 import { AppProvider } from './context/AppContext';
 import { AppDrawer } from './components/common/AppDrawer';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -76,12 +77,14 @@ function App() {
     >
       <AuthProvider>
         <AppProvider>
-          <Box sx={{ display: "flex" }}>
-            <AppDrawer />
-            <Box component="main" sx={{ flexGrow: 1 }}>
-              <AppContent />
+          <LanguageProvider>
+            <Box sx={{ display: "flex" }}>
+              <AppDrawer />
+              <Box component="main" sx={{ flexGrow: 1 }}>
+                <AppContent />
+              </Box>
             </Box>
-          </Box>
+          </LanguageProvider>
         </AppProvider>
       </AuthProvider>
     </SnackbarProvider>
