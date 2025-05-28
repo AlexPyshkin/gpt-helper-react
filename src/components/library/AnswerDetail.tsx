@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { StyledTextareaAutosize } from '../../styles/TextareaAutosize.styles';
 import { StyledReactMarkdown } from '../../styles/ReactMarkdown.styles';
+import { useTranslation } from 'react-i18next';
 
 type AnswerDetailProps = {
   currentState: AppState;
@@ -21,6 +22,7 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
   const [updateAnswer] = useMutation(UPDATE_ANSWER);
   const [isChanged, setIsChanged] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const { t } = useTranslation();
 
   const styles = {
     container: {
@@ -63,7 +65,7 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
       currentState.answer = response.data.updateAnswer;
       setIsChanged(false);
     } catch (error) {
-      console.error("Error saving answer:", error);
+      console.error(t('library.errorSavingAnswer'), error);
     }
   };
 
@@ -123,7 +125,7 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
                   color="primary"
                 />
               }
-              label="Edit mode"
+              label={t('library.editMode')}
               sx={{ marginRight: 2, alignItems: "center"}}
             />
             <Box>

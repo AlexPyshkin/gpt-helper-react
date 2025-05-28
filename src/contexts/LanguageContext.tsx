@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Language = 'ru' | 'en';
 
@@ -10,21 +11,15 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem('language');
-    return (savedLanguage as Language) || 'ru';
-  });
+  const { i18n } = useTranslation();
 
   const toggleLanguage = () => {
-    setLanguage((prev) => {
-      const newLanguage = prev === 'ru' ? 'en' : 'ru';
-      localStorage.setItem('language', newLanguage);
-      return newLanguage;
-    });
+    const newLanguage = i18n.language === 'ru' ? 'en' : 'ru';
+    i18n.changeLanguage(newLanguage);
   };
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+    <LanguageContext.Provider value={{ language: i18n.language as Language, toggleLanguage }}>
       {children}
     </LanguageContext.Provider>
   );

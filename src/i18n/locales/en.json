@@ -1,0 +1,62 @@
+{
+  "header": {
+    "appName": "GPT Helper",
+    "library": "Library",
+    "dialog": "Dialog",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "footer": {
+    "copyright": "© 2024 GPT Helper. All rights reserved."
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "submit": "Submit",
+    "error": "Authentication error",
+    "noAccount": "Don't have an account? Register",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "registrationError": "Registration error"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "or": "or",
+    "settings": "Settings",
+    "language": "Language",
+    "guest": "Guest"
+  },
+  "dialog": {
+    "categoryNotFound": "Category not found"
+  },
+  "library": {
+    "selectCategory": "Please select a category to display questions",
+    "search": "Search",
+    "errorFetchingAnswer": "Error fetching answer:",
+    "answerNotFound": "Answer not found in result:",
+    "errorLoadingQuestions": "Error loading questions:",
+    "errorSavingQuestion": "Error saving question:",
+    "errorUploadingAudio": "Error uploading audio:",
+    "microphoneAccessDenied": "Microphone access denied:",
+    "newQuestionPlaceholder": "Ask a new question for category {{category}}",
+    "editQuestionPlaceholder": "Edit the question",
+    "questionTypes": {
+      "cheatSheet": "Cheat Sheet",
+      "freeQuestion": "Free Question",
+      "task": "Task"
+    },
+    "errorSavingAnswer": "Error saving answer:",
+    "editMode": "Edit mode",
+    "selectCategoryPrompt": "Please select a category to display questions.",
+    "noRecordedMessages": "No recorded messages"
+  }
+} 

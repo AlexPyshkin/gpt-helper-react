@@ -5,12 +5,14 @@ import reactLogo from '/src/assets/react.svg';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { t } = useTranslation();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -37,17 +39,17 @@ export const Header = () => {
               style={{ height: '28px', marginRight: '12px' }} 
             />
             <Typography variant="subtitle1" component="div">
-              GPT Helper
+              {t('header.appName')}
             </Typography>
           </Link>
         </Box>
 
         <Box sx={{ display: 'flex', gap: 1, marginRight: 1 }}>
           <Button color="inherit" component={Link} to="/library" size="small">
-            Библиотека
+            {t('header.library')}
           </Button>
           <Button color="inherit" component={Link} to="/dialog" size="small">
-            Диалог
+            {t('header.dialog')}
           </Button>
         </Box>
 
@@ -84,7 +86,7 @@ export const Header = () => {
                 onClose={handleClose}
               >
                 <MenuItem disabled>{user?.email}</MenuItem>
-                <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+                <MenuItem onClick={handleLogout}>{t('header.logout')}</MenuItem>
               </Menu>
             </>
           ) : (
@@ -95,7 +97,7 @@ export const Header = () => {
               startIcon={<Login />}
               size="small"
             >
-              Войти
+              {t('header.login')}
             </Button>
           )}
         </Box>

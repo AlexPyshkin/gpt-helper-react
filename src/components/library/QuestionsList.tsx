@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { Answer, AppState, Question } from '../../types';
 import type { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } from '../../graphql/types';
+import { useTranslation } from 'react-i18next';
 
 type QuestionsListProps = {
   currentState: AppState;
@@ -29,6 +30,7 @@ export const QuestionsList = ({
   variant = 'library'
 }: QuestionsListProps) => {
   const [filter, setFilter] = useState('');
+  const { t } = useTranslation();
 
   const { loading, error, data } = useQuery<GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables>(
     GET_QUESTIONS_BY_CATEGORY,
@@ -57,7 +59,7 @@ export const QuestionsList = ({
     });
 
     if (!response.ok) {
-      console.error("Ошибка при получении ответа:", response.statusText);
+      console.error(t('library.errorFetchingAnswer'), response.statusText);
       return;
     }
 
@@ -66,7 +68,7 @@ export const QuestionsList = ({
       setAnswerForQuestion(result.data.answer);
     } else {
       setAnswerForQuestion(null);
-      console.error("Ответ не найден в результате:", result);
+      console.error(t('library.answerNotFound'), result);
     }
   };
 
@@ -108,7 +110,7 @@ export const QuestionsList = ({
         overflow: 'auto'
       }}>
         <Typography variant="h6" align="center">
-          Пожалуйста, выберите категорию для отображения вопросов.
+          {t('library.selectCategory')}
         </Typography>
       </Box>
     );
@@ -116,8 +118,8 @@ export const QuestionsList = ({
 
   if (loading) return <CircularProgress />;
   if (error) {
-    console.error("Error loading questions:", error.message);
-    return <Typography color="error">Error: {error.message}</Typography>;
+    console.error(t('library.errorLoadingQuestions'), error.message);
+    return <Typography color="error">{t('common.error')}: {error.message}</Typography>;
   }
   
   const filteredQuestions = data!.questions
@@ -134,7 +136,7 @@ export const QuestionsList = ({
       overflowY: 'auto'
     }}>
       <TextField
-        label="Поиск"
+        label={t('library.search')}
         variant="outlined"
         size="small"
         fullWidth

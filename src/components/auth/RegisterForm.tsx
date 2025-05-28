@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   TextField,
@@ -18,18 +19,19 @@ export const RegisterForm = () => {
   const [error, setError] = useState('');
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError('Пароли не совпадают');
+      setError(t('auth.passwordsDoNotMatch'));
       return;
     }
     try {
       await register(email, password, name);
       navigate('/');
     } catch (err) {
-      setError('Ошибка при регистрации');
+      setError(t('auth.registrationError'));
     }
   };
 
@@ -55,7 +57,7 @@ export const RegisterForm = () => {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
-          Регистрация
+          {t('auth.register')}
         </Typography>
         {error && (
           <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
@@ -68,7 +70,7 @@ export const RegisterForm = () => {
             required
             fullWidth
             id="name"
-            label="Имя"
+            label={t('auth.name')}
             name="name"
             autoComplete="name"
             autoFocus
@@ -80,7 +82,7 @@ export const RegisterForm = () => {
             required
             fullWidth
             id="email"
-            label="Email"
+            label={t('auth.email')}
             name="email"
             autoComplete="email"
             value={email}
@@ -91,7 +93,7 @@ export const RegisterForm = () => {
             required
             fullWidth
             name="password"
-            label="Пароль"
+            label={t('auth.password')}
             type="password"
             id="password"
             autoComplete="new-password"
@@ -103,7 +105,7 @@ export const RegisterForm = () => {
             required
             fullWidth
             name="confirmPassword"
-            label="Подтвердите пароль"
+            label={t('auth.confirmPassword')}
             type="password"
             id="confirmPassword"
             autoComplete="new-password"
@@ -116,7 +118,7 @@ export const RegisterForm = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Зарегистрироваться
+            {t('auth.register')}
           </Button>
         </Box>
       </Paper>

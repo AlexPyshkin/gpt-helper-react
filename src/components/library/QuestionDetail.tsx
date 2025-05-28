@@ -9,6 +9,7 @@ import { AppState } from "../../types";
 import { StopRounded, VoiceChat } from "@mui/icons-material";
 import { config } from "../../config";
 import { StyledTextareaAutosize } from "../../styles/TextareaAutosize.styles";
+import { useTranslation } from 'react-i18next';
 
 type CategoriesListProps = {
   currentState: AppState;
@@ -36,6 +37,7 @@ export const QuestionDetail = ({
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { t } = useTranslation();
 
   const styles = {
     container: {
@@ -105,7 +107,7 @@ export const QuestionDetail = ({
         loadingAnswer: false
       });
     } catch (error) {
-      console.error("Error saving question:", error);
+      console.error(t('library.errorSavingQuestion'), error);
     }
   };
 
@@ -153,7 +155,7 @@ export const QuestionDetail = ({
             const result = await response.json();
             setQuestionText(result.responseBodyBatch[0])
           } catch (err) {
-            console.error('Error uploading audio:', err);
+            console.error(t('library.errorUploadingAudio'), err);
           } finally {
             setIsProcessing(false);
           }
@@ -166,7 +168,7 @@ export const QuestionDetail = ({
         setIsRecording(true);
 
       } catch (err) {
-        console.error('Microphone access denied:', err);
+        console.error(t('library.microphoneAccessDenied'), err);
       }
 
     } else {
@@ -200,8 +202,8 @@ export const QuestionDetail = ({
         minRows={styles.textarea[variant].minRows}
         placeholder={
           isNewDisabled
-            ? "Задайте новый вопрос категории " + currentState.category?.name
-            : "Отредактируйте вопрос"
+            ? t('library.newQuestionPlaceholder', { category: currentState.category?.name })
+            : t('library.editQuestionPlaceholder')
         }
         value={questionText}
         onChange={handleInputChange}
@@ -231,9 +233,9 @@ export const QuestionDetail = ({
               displayEmpty
               size="small"
             >
-              <MenuItem value="QUESTION_WITH_TOPIC">Шпаргалка</MenuItem>
-              <MenuItem value="SHORT_DIALOG">Свободный вопрос</MenuItem>
-              <MenuItem value="ALGORITHM_TASK">Задача</MenuItem>
+              <MenuItem value="QUESTION_WITH_TOPIC">{t('library.questionTypes.cheatSheet')}</MenuItem>
+              <MenuItem value="SHORT_DIALOG">{t('library.questionTypes.freeQuestion')}</MenuItem>
+              <MenuItem value="ALGORITHM_TASK">{t('library.questionTypes.task')}</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -249,8 +251,7 @@ export const QuestionDetail = ({
             disabled={!currentState?.question || questionText === currentState.question.questionText}>
             <UndoIcon />
           </IconButton>
-          <IconButton onClick={handleCommitQuestion} color="primary"
-            disabled={isCommitDisabled}>
+          <IconButton onClick={handleCommitQuestion} color="primary" disabled={isCommitDisabled}>
             <CheckIcon />
           </IconButton>
         </Box>

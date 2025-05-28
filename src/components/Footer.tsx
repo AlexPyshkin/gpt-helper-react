@@ -1,6 +1,9 @@
 import { Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export const Footer = () => {
+  const { t } = useTranslation();
+  
   return (
     <Box 
       sx={{ 
@@ -10,7 +13,7 @@ export const Footer = () => {
       }}
     >
       <Typography variant="body2" color="textSecondary">
-        © {new Date().getFullYear()} Alexandr Pyshkin Inc. All rights reserved. Contact: <a href="mailto:alex.pyshkin.91.dev@gmail.com">alex.pyshkin.91.dev@gmail.com</a>
+        {t('footer.copyright')} Contact: <a href="mailto:alex.pyshkin.91.dev@gmail.com">alex.pyshkin.91.dev@gmail.com</a>
       </Typography>
     </Box>
   );

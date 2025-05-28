@@ -15,6 +15,7 @@ import { StopRounded, VoiceChat } from '@mui/icons-material';
 import { useLazyQuery } from '@apollo/client';
 import { GET_TEXT_CONTEXT } from '../../graphql/queries';
 import { config } from '../../config';
+import { useTranslation } from 'react-i18next';
 
 type VoiceContextTrackerProps = {
   currentState: AppState;
@@ -32,6 +33,8 @@ export const VoiceContextTracker = ({
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [getTextContext, { data, loading }] = useLazyQuery(GET_TEXT_CONTEXT);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (currentVoiceText) {
@@ -152,7 +155,7 @@ export const VoiceContextTracker = ({
         overflow: 'auto'
       }}>
         <Typography variant="h6" align="center">
-          Пожалуйста, выберите категорию для отображения вопросов.
+          {t('library.selectCategoryPrompt')}
         </Typography>
       </Box>
     );
@@ -180,7 +183,7 @@ export const VoiceContextTracker = ({
       </Box>
       {speachContext.length === 0 ? (
         <Typography variant="body1" align="center" sx={{ p: 2 }}>
-          Нет записанных сообщений
+          {t('library.noRecordedMessages')}
         </Typography>
       ) : (
         <List>

@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { GET_DIALOG_CATEGORY, GET_QUESTIONS_BY_CATEGORY } from '../../graphql/queries';
 import type { Answer, AppState, Question } from '../../types';
 import { QuestionDetail } from '../library/QuestionDetail';
@@ -16,6 +17,7 @@ export const Dialog = () => {
     answer: null,
     loadingAnswer: false,
   });
+  const { t } = useTranslation();
 
   const { loading, error, data } = useQuery(GET_DIALOG_CATEGORY);
 
@@ -57,8 +59,8 @@ export const Dialog = () => {
     setState({ ...state, answer, loadingAnswer: false });
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography>Error: {error.message}</Typography>;
+  if (loading) return <Typography>{t('common.loading')}</Typography>;
+  if (error) return <Typography>{t('common.error')}: {error.message}</Typography>;
   
   return (
     <Box
@@ -80,7 +82,7 @@ export const Dialog = () => {
         }}
       >
         <Typography variant="h6" sx={{ p: 1, borderBottom: '1px solid #ccc', display: 'none' }}>
-          {state.category?.name || 'Категория не найдена'}
+          {state.category?.name || t('dialog.categoryNotFound')}
         </Typography>
         <QuestionsList 
           currentState={state} 

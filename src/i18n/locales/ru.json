@@ -1,0 +1,62 @@
+{
+  "header": {
+    "appName": "GPT Помощник",
+    "library": "Библиотека",
+    "dialog": "Диалог",
+    "login": "Войти",
+    "logout": "Выйти"
+  },
+  "footer": {
+    "copyright": "© 2024 GPT Помощник. Все права защищены."
+  },
+  "auth": {
+    "login": "Вход",
+    "logout": "Выход",
+    "register": "Регистрация",
+    "email": "Email",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "name": "Имя",
+    "submit": "Отправить",
+    "error": "Ошибка аутентификации",
+    "noAccount": "Нет аккаунта? Зарегистрироваться",
+    "passwordsDoNotMatch": "Пароли не совпадают",
+    "registrationError": "Ошибка при регистрации"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "or": "или",
+    "settings": "Настройки",
+    "language": "Язык",
+    "guest": "Гость"
+  },
+  "dialog": {
+    "categoryNotFound": "Категория не найдена"
+  },
+  "library": {
+    "selectCategory": "Пожалуйста, выберите категорию для отображения вопросов",
+    "search": "Поиск",
+    "errorFetchingAnswer": "Ошибка при получении ответа:",
+    "answerNotFound": "Ответ не найден в результате:",
+    "errorLoadingQuestions": "Ошибка загрузки вопросов:",
+    "errorSavingQuestion": "Ошибка сохранения вопроса:",
+    "errorUploadingAudio": "Ошибка загрузки аудио:",
+    "microphoneAccessDenied": "Доступ к микрофону запрещен:",
+    "newQuestionPlaceholder": "Задайте новый вопрос категории {{category}}",
+    "editQuestionPlaceholder": "Отредактируйте вопрос",
+    "questionTypes": {
+      "cheatSheet": "Шпаргалка",
+      "freeQuestion": "Свободный вопрос",
+      "task": "Задача"
+    },
+    "errorSavingAnswer": "Ошибка сохранения ответа:",
+    "editMode": "Режим редактирования",
+    "selectCategoryPrompt": "Пожалуйста, выберите категорию для отображения вопросов.",
+    "noRecordedMessages": "Нет записанных сообщений"
+  }
+} 

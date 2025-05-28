@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   TextField,
@@ -21,6 +22,7 @@ export const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +33,7 @@ export const LoginForm = () => {
       const from = location.state?.from?.pathname || '/library';
       navigate(from);
     } catch (err) {
-      setError('Неверный email или пароль');
+      setError(t('auth.error'));
     } finally {
       setIsLoading(false);
     }
@@ -42,7 +44,7 @@ export const LoginForm = () => {
     
     if (!credentialResponse?.credential) {
       console.error('No credential in Google response');
-      setError('Не удалось получить данные от Google');
+      setError(t('auth.error'));
       return;
     }
 
@@ -56,7 +58,7 @@ export const LoginForm = () => {
       navigate(from);
     } catch (err) {
       console.error('Google login error:', err);
-      setError('Ошибка авторизации через Google');
+      setError(t('auth.error'));
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +66,7 @@ export const LoginForm = () => {
 
   const handleGoogleError = (error: any) => {
     console.error('Google OAuth error:', error);
-    setError('Ошибка авторизации через Google. Пожалуйста, попробуйте еще раз.');
+    setError(t('auth.error'));
   };
 
   return (
@@ -89,7 +91,7 @@ export const LoginForm = () => {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
-          Вход в систему
+          {t('auth.login')}
         </Typography>
         {error && (
           <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
@@ -102,7 +104,7 @@ export const LoginForm = () => {
             required
             fullWidth
             id="email"
-            label="Email"
+            label={t('auth.email')}
             name="email"
             autoComplete="email"
             autoFocus
@@ -115,7 +117,7 @@ export const LoginForm = () => {
             required
             fullWidth
             name="password"
-            label="Пароль"
+            label={t('auth.password')}
             type="password"
             id="password"
             autoComplete="current-password"
@@ -130,9 +132,9 @@ export const LoginForm = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={isLoading}
           >
-            {isLoading ? 'Вход...' : 'Войти'}
+            {isLoading ? t('common.loading') : t('auth.login')}
           </Button>
-          <Divider sx={{ my: 2 }}>или</Divider>
+          <Divider sx={{ my: 2 }}>{t('common.or')}</Divider>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
@@ -142,7 +144,7 @@ export const LoginForm = () => {
           </Box>
           <Box sx={{ textAlign: 'center' }}>
             <Link href="/register" variant="body2" sx={{ pointerEvents: isLoading ? 'none' : 'auto' }}>
-              Нет аккаунта? Зарегистрироваться
+              {t('auth.noAccount')}
             </Link>
           </Box>
         </Box>

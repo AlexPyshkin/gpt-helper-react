@@ -20,31 +20,14 @@ import LanguageIcon from "@mui/icons-material/Language";
 import { useAppContext } from "../../context/AppContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLanguage } from "../../contexts/LanguageContext";
-
-const translations = {
-  ru: {
-    settings: "Настройки",
-    editMode: "Режим редактирования",
-    language: "Язык",
-    russian: "Русский",
-    english: "English",
-  },
-  en: {
-    settings: "Settings",
-    editMode: "Edit Mode",
-    language: "Language",
-    russian: "Русский",
-    english: "English",
-  },
-};
+import { useTranslation } from 'react-i18next';
 
 export const AppDrawer = () => {
   const { state, dispatch } = useAppContext();
   const { isAuthenticated, user } = useAuth();
   const { language, toggleLanguage } = useLanguage();
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const t = translations[language];
+  const { t } = useTranslation();
 
   const handleEditModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'SET_FILTERS', payload: { editMode: event.target.checked } });
@@ -77,7 +60,7 @@ export const AppDrawer = () => {
       }}>
         {drawerOpen && (
           <Typography variant="subtitle2" sx={{ ml: 1 }}>
-            {t.settings}
+            {t('common.settings')}
           </Typography>
         )}
         <IconButton 
@@ -97,7 +80,7 @@ export const AppDrawer = () => {
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText 
-                primary={user?.name || 'Гость'} 
+                primary={user?.name || t('common.guest')} 
                 secondary={user?.email}
               />
             </ListItem>
@@ -106,8 +89,8 @@ export const AppDrawer = () => {
                 <LanguageIcon />
               </ListItemIcon>
               <ListItemText 
-                primary={language === 'ru' ? t.russian : t.english} 
-                secondary={t.language}
+                primary={language === 'ru' ? 'Русский' : 'English'} 
+                secondary={t('common.language')}
               />
             </ListItemButton>
           </List>
@@ -121,7 +104,7 @@ export const AppDrawer = () => {
                 size="small"
               />
             }
-            label={t.editMode}
+            label={t('library.editMode')}
             sx={{
               m: 0,
               "& .MuiFormControlLabel-label": {

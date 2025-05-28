@@ -15,6 +15,7 @@ import {AppState, Category} from '../../types';
 import {useState} from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { useTranslation } from 'react-i18next';
 
 type CategoriesListProps = {
     onSelectCategory: (category: Category) => void;
@@ -106,9 +107,10 @@ const CategoryTreeItem = ({category, level = 0, onSelectCategory, currentState}:
 
 export const CategoriesList = ({onSelectCategory, currentState}: CategoriesListProps) => {
     const {loading, error, data} = useQuery(GET_LIBRARY_CATEGORIES);
+    const { t } = useTranslation();
 
     if (loading) return <CircularProgress/>;
-    if (error) return <Typography color="error">Error: {error.message}</Typography>;
+    if (error) return <Typography color="error">{t('common.error')}: {error.message}</Typography>;
 
     const categoryTree = buildCategoryTree(data.categories);
 
