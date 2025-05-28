@@ -9,6 +9,7 @@ import { RegisterForm } from './components/auth/RegisterForm';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SnackbarProvider } from 'notistack';
 import './App.css';
+import { AppProvider } from './context/AppContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -73,7 +74,9 @@ function App() {
       autoHideDuration={3000}
     >
       <AuthProvider>
-        <AppContent />
+        <AppProvider>
+          <AppContent />
+        </AppProvider>
       </AuthProvider>
     </SnackbarProvider>
   );

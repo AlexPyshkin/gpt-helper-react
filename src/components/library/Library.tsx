@@ -5,7 +5,7 @@ import { QuestionDetail } from "./QuestionDetail";
 import { AnswerDetail } from "./AnswerDetail";
 import { useQuery } from "@apollo/client";
 import { GET_QUESTIONS_BY_CATEGORY } from "../../graphql/queries";
-import type { AppState, Category, Question, Answer } from "../../types";
+import type { Category, Question, Answer } from "../../types";
 import type {
   GetQuestionsByCategoryQuery,
   GetQuestionsByCategoryQueryVariables,
@@ -22,16 +22,10 @@ import {
 import { TagList } from "../tags/TagList";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { useAppContext } from "../../context/AppContext";
 
 export const Library = () => {
-  const [state, setState] = useState<AppState>({
-    category: null,
-    question: null,
-    answer: null,
-    loadingAnswer: false,
-    editMode: false,
-  });
-
+  const { state, dispatch } = useAppContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { refetch: updateQuestions } = useQuery<
@@ -44,36 +38,34 @@ export const Library = () => {
   });
 
   const handleCategorySelect = (category: Category) => {
-    setState({ ...state, category, question: null, answer: null });
+    dispatch({ type: 'SET_CATEGORY', payload: category });
   };
 
   const handleQuestionSelect = (question: Question) => {
-    setState({ ...state, question, loadingAnswer: true });
+    dispatch({ type: 'SET_QUESTION', payload: question });
   };
 
   const handleUpdateTags = (question: Question) => {
-    setState({ ...state, question, loadingAnswer: false });
+    dispatch({ type: 'SET_QUESTION', payload: question });
+    dispatch({ type: 'SET_LOADING_ANSWER', payload: false });
   };
 
   const handleAnswerUpdate = (answer: Answer | null) => {
-    setState({ ...state, answer, loadingAnswer: false });
+    dispatch({ type: 'SET_ANSWER', payload: answer });
   };
 
   const setLoadingAnswer = (isLoading: boolean) => {
-    setState({ ...state, loadingAnswer: isLoading });
+    dispatch({ type: 'SET_LOADING_ANSWER', payload: isLoading });
   };
 
   const handleEditModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, editMode: event.target.checked });
+    dispatch({ type: 'SET_FILTERS', payload: { editMode: event.target.checked } });
   };
 
-  const refetchQuestionsAndSetSelected = async (newState: AppState) => {
+  const refetchQuestionsAndSetSelected = async (newState: { question: Question | null; answer: Answer | null }) => {
     await updateQuestions();
-    setState((prevState) => ({
-      ...prevState,
-      question: newState.question,
-      answer: newState.answer,
-    }));
+    dispatch({ type: 'SET_QUESTION', payload: newState.question });
+    dispatch({ type: 'SET_ANSWER', payload: newState.answer });
   };
 
   return (
@@ -127,7 +119,7 @@ export const Library = () => {
             <FormControlLabel
               control={
                 <Switch
-                  checked={state.editMode}
+                  checked={state.filters.editMode}
                   onChange={handleEditModeChange}
                   color="primary"
                   size="small"
