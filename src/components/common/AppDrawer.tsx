@@ -17,14 +17,20 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useAppContext } from "../../context/AppContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const AppDrawer = () => {
   const { state, dispatch } = useAppContext();
+  const { isAuthenticated } = useAuth();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleEditModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'SET_FILTERS', payload: { editMode: event.target.checked } });
   };
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <Drawer
@@ -37,8 +43,6 @@ export const AppDrawer = () => {
           boxSizing: 'border-box',
           transition: 'width 0.2s ease-in-out',
           overflowX: 'hidden',
-          // top: '48px',
-          // height: 'calc(100% - 48px)',
         },
       }}
     >
