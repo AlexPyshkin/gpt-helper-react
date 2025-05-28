@@ -10,23 +10,12 @@ import type {
   GetQuestionsByCategoryQuery,
   GetQuestionsByCategoryQueryVariables,
 } from "../../graphql/types";
-import {
-  Box,
-  Drawer,
-  IconButton,
-  FormControlLabel,
-  Switch,
-  Typography,
-  Divider,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { TagList } from "../tags/TagList";
-import MenuIcon from "@mui/icons-material/Menu";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { useAppContext } from "../../context/AppContext";
 
 export const Library = () => {
   const { state, dispatch } = useAppContext();
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { refetch: updateQuestions } = useQuery<
     GetQuestionsByCategoryQuery,
@@ -58,10 +47,6 @@ export const Library = () => {
     dispatch({ type: 'SET_LOADING_ANSWER', payload: isLoading });
   };
 
-  const handleEditModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'SET_FILTERS', payload: { editMode: event.target.checked } });
-  };
-
   const refetchQuestionsAndSetSelected = async (newState: { question: Question | null; answer: Answer | null }) => {
     await updateQuestions();
     dispatch({ type: 'SET_QUESTION', payload: newState.question });
@@ -72,71 +57,12 @@ export const Library = () => {
     <Box
       sx={{
         display: "flex",
-        height: "calc(100vh - 96px)", // 64px for header + 64px for footer
+        height: "calc(100vh - 96px)",
         width: "100%",
         overflow: "hidden",
         position: "relative",
       }}
     >
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerOpen ? 240 : 48,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerOpen ? 240 : 48,
-            boxSizing: 'border-box',
-            transition: 'width 0.2s ease-in-out',
-            overflowX: 'hidden',
-            top: '48px', // высота хедера
-            height: 'calc(100% - 48px)', // вычитаем высоту хедера
-          },
-        }}
-      >
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: drawerOpen ? 'space-between' : 'center',
-          p: 1,
-          minHeight: '48px'
-        }}>
-          {drawerOpen && (
-            <Typography variant="subtitle2" sx={{ ml: 1 }}>
-              Настройки
-            </Typography>
-          )}
-          <IconButton 
-            onClick={() => setDrawerOpen(!drawerOpen)}
-            size="small"
-            sx={{ p: 0.5 }}
-          >
-            {drawerOpen ? <MenuIcon fontSize="small" /> : <SettingsIcon fontSize="small" />}
-          </IconButton>
-        </Box>
-        <Divider />
-        {drawerOpen && (
-          <Box sx={{ p: 2 }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={state.filters.editMode}
-                  onChange={handleEditModeChange}
-                  color="primary"
-                  size="small"
-                />
-              }
-              label="Edit mode"
-              sx={{
-                m: 0,
-                "& .MuiFormControlLabel-label": {
-                  fontSize: "0.875rem",
-                },
-              }}
-            />
-            {/* Здесь будут дополнительные фильтры */}
-          </Box>
-        )}
-      </Drawer>
       <Box
         sx={{
           display: "flex",

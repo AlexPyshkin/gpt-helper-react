@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { Header } from './components/Header';
 import { Library } from './components/library/Library';
 import { Dialog } from './components/dialog/Dialog';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { Footer } from './components/Footer';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SnackbarProvider } from 'notistack';
 import './App.css';
 import { AppProvider } from './context/AppContext';
+import { AppDrawer } from './components/common/AppDrawer';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -75,7 +76,12 @@ function App() {
     >
       <AuthProvider>
         <AppProvider>
-          <AppContent />
+          <Box sx={{ display: "flex" }}>
+            <AppDrawer />
+            <Box component="main" sx={{ flexGrow: 1 }}>
+              <AppContent />
+            </Box>
+          </Box>
         </AppProvider>
       </AuthProvider>
     </SnackbarProvider>
