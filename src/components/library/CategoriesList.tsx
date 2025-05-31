@@ -16,6 +16,7 @@ import {useState} from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../contexts/AuthContext';
 
 type CategoriesListProps = {
     onSelectCategory: (category: Category) => void;
@@ -116,7 +117,10 @@ const CategoryTreeItem = ({category, level = 0, onSelectCategory, currentState}:
 };
 
 export const CategoriesList = ({onSelectCategory, currentState}: CategoriesListProps) => {
-    const {loading, error, data} = useQuery(GET_LIBRARY_CATEGORIES);
+    const { user } = useAuth();
+    const {loading, error, data} = useQuery(GET_LIBRARY_CATEGORIES, {
+        variables: { email: user?.email || '' }
+    });
     const { t } = useTranslation();
 
     if (loading) return <CircularProgress/>;

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_LIBRARY_CATEGORIES = gql`
-  query GetLibraryCategories {
-    categories: libraryCategories {
+  query GetLibraryCategories($email: String!) {
+    categories: libraryCategories(email: $email) {
       id
       name
       parentId
@@ -26,8 +26,8 @@ export const GET_TEXT_CONTEXT = gql`
 `;
 
 export const GET_DIALOG_CATEGORY = gql`
-  query GetDialogCategories {
-    category: dialogCategory {
+  query GetDialogCategories($email: String!) {
+    category: dialogCategory(email: $email) {
       id
       name
     }

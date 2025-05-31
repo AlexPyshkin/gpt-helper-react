@@ -9,6 +9,7 @@ import { GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables } fro
 import { QuestionsList } from '../library/QuestionsList';
 import { AnswerDetail } from '../library/AnswerDetail';
 import { VoiceContextTracker } from '../library/VoiceContextTracker';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const Dialog = () => {
   const [state, setState] = useState<AppState>({
@@ -16,10 +17,16 @@ export const Dialog = () => {
     question: null,
     answer: null,
     loadingAnswer: false,
+    filters: {
+      editMode: false
+    }
   });
   const { t } = useTranslation();
+  const { user } = useAuth();
 
-  const { loading, error, data } = useQuery(GET_DIALOG_CATEGORY);
+  const { loading, error, data } = useQuery(GET_DIALOG_CATEGORY, {
+    variables: { email: user?.email || '' }
+  });
 
   useEffect(() => {
     if (data?.category) {
