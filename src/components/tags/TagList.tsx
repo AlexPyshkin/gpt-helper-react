@@ -19,17 +19,21 @@ import {
 } from "../../graphql/types";
 import { Save } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
+import { TagDisplay } from "./TagDisplay";
 
 interface TagListProps {
   currentState: AppState;
   onUpadeTagsQuestion: (newState: Question) => void;
-  // variant?: "library" | "dialog";
 }
 
 export const TagList = ({
   currentState,
   onUpadeTagsQuestion,
 }: TagListProps) => {
+  if (!currentState.filters.editMode) {
+    return <TagDisplay currentState={currentState} />;
+  }
+
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
     currentState.question?.tags ?? []
   );

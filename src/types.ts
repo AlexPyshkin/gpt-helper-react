@@ -27,5 +27,7 @@ export interface AppState {
     question: Question | null;
     answer: Answer | null;
     loadingAnswer: boolean;
-    editMode: boolean;
+    filters: {
+        editMode: boolean;
+    };
 }
