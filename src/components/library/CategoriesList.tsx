@@ -45,7 +45,17 @@ const buildCategoryTree = (categories: Category[]): Category[] => {
         }
     });
 
-    return rootCategories;
+    // Sort categories at each level
+    const sortCategories = (cats: Category[]): Category[] => {
+        return cats
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map(cat => ({
+                ...cat,
+                children: cat.children ? sortCategories(cat.children) : []
+            }));
+    };
+
+    return sortCategories(rootCategories);
 };
 
 const CategoryTreeItem = ({category, level = 0, onSelectCategory, currentState}: {

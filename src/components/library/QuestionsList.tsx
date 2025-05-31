@@ -124,7 +124,7 @@ export const QuestionsList = ({
   
   const filteredQuestions = data!.questions
     .filter((q) => q.questionText.toLowerCase().includes(filter.toLowerCase()))
-    .sort((a, b) => a.questionText.localeCompare(b.questionText));
+    .sort((a, b) => a.id.localeCompare(b.id));
 
   return (
     <Box sx={{ 
