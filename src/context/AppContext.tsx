@@ -1,16 +1,10 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { User, Tag } from '../graphql/types';
 
 // Types
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  // Add other user properties as needed
-}
-
 export interface Filters {
   editMode: boolean;
-  // Add other filter properties as needed
+  tagFilter: string;
 }
 
 interface AppState {
@@ -44,6 +38,7 @@ interface Answer {
 type Action =
   | { type: 'SET_USER'; payload: User | null }
   | { type: 'SET_FILTERS'; payload: Partial<Filters> }
+  | { type: 'APPLY_FILTERS'; payload: { tagFilter: string } }
   | { type: 'SET_CATEGORY'; payload: Category | null }
   | { type: 'SET_QUESTION'; payload: Question | null }
   | { type: 'SET_ANSWER'; payload: Answer | null }
@@ -54,6 +49,7 @@ const initialState: AppState = {
   user: null,
   filters: {
     editMode: false,
+    tagFilter: '',
   },
   category: null,
   question: null,
@@ -68,6 +64,8 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return { ...state, user: action.payload };
     case 'SET_FILTERS':
       return { ...state, filters: { ...state.filters, ...action.payload } };
+    case 'APPLY_FILTERS':
+      return { ...state, filters: { ...state.filters, tagFilter: action.payload.tagFilter } };
     case 'SET_CATEGORY':
       return { ...state, category: action.payload, question: null, answer: null };
     case 'SET_QUESTION':

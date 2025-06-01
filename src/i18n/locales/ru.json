@@ -33,7 +33,11 @@
     "or": "или",
     "settings": "Настройки",
     "language": "Язык",
-    "guest": "Гость"
+    "guest": "Гость",
+    "tagFilter": "Фильтр по тегам",
+    "enterTag": "Введите название тега",
+    "clear": "Очистить",
+    "apply": "Применить"
   },
   "dialog": {
     "categoryNotFound": "Категория не найдена"

@@ -33,7 +33,11 @@
     "or": "or",
     "settings": "Settings",
     "language": "Language",
-    "guest": "Guest"
+    "guest": "Guest",
+    "tagFilter": "Tag Filter",
+    "enterTag": "Enter tag name",
+    "clear": "Clear",
+    "apply": "Apply"
   },
   "dialog": {
     "categoryNotFound": "Category not found"

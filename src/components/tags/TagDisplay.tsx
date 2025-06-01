@@ -10,6 +10,7 @@ import { useQuery } from "@apollo/client";
 import { GET_TAGS } from "../../graphql/queries";
 import type { AppState } from "../../types";
 import { Tag } from "../../graphql/types";
+import { useAppContext } from "../../context/AppContext";
 
 interface TagDisplayProps {
   currentState: AppState;
@@ -19,6 +20,7 @@ export const TagDisplay = ({ currentState }: TagDisplayProps) => {
   const [similarTags, setSimilarTags] = useState<Tag[]>([]);
   const { loading, error, data } = useQuery(GET_TAGS);
   const selectedTags = currentState.question?.tags ?? [];
+  const { dispatch } = useAppContext();
 
   useEffect(() => {
     if (data?.tags) {
@@ -29,6 +31,13 @@ export const TagDisplay = ({ currentState }: TagDisplayProps) => {
       setSimilarTags(otherTags);
     }
   }, [data, selectedTags]);
+
+  const handleTagClick = (tag: Tag) => {
+    dispatch({
+      type: 'SET_FILTERS',
+      payload: { tagFilter: tag.name }
+    });
+  };
 
   if (loading) return null;
   if (error) return null;
@@ -46,6 +55,7 @@ export const TagDisplay = ({ currentState }: TagDisplayProps) => {
             key={tag.id}
             label={tag.name}
             color="primary"
+            onClick={() => handleTagClick(tag)}
             sx={{ m: 0.2 }}
           />
         ))}
@@ -64,6 +74,7 @@ export const TagDisplay = ({ currentState }: TagDisplayProps) => {
                 key={tag.id}
                 label={tag.name}
                 variant="outlined"
+                onClick={() => handleTagClick(tag)}
                 sx={{ m: 0.2 }}
               />
             ))}
