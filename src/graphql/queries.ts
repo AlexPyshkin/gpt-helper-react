@@ -35,8 +35,8 @@ export const GET_DIALOG_CATEGORY = gql`
 `;
 
 export const GET_QUESTIONS_BY_CATEGORY = gql`
-  query GetQuestionsByCategory($categoryId: ID!) {
-    questions(categoryId: $categoryId) {
+  query GetQuestionsByCategory($categoryId: ID!, $tagFilter: String) {
+    questions(categoryId: $categoryId, tagFilter: $tagFilter) {
       id
       questionText
       tags {

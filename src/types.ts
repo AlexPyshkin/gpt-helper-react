@@ -22,12 +22,16 @@ export interface Answer {
     answerText: string;
 }
 
-export interface AppState {
+export interface Filters {
+    editMode: boolean;
+    tagFilter: string;
+  }
+  
+  export interface AppState {
+    user: User | null;
+    filters: Filters;
     category: Category | null;
     question: Question | null;
     answer: Answer | null;
     loadingAnswer: boolean;
-    filters: {
-        editMode: boolean;
-    };
 }

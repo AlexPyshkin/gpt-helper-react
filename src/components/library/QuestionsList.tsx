@@ -35,7 +35,7 @@ export const QuestionsList = ({
   const { loading, error, data } = useQuery<GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables>(
     GET_QUESTIONS_BY_CATEGORY,
     {
-      variables: { categoryId: currentState.category?.id },
+      variables: { categoryId: currentState.category?.id, tagFilter: currentState.filters.tagFilter },
       fetchPolicy: 'network-only',
     }
   );

@@ -45,6 +45,7 @@ export interface GetQuestionsByCategoryQuery {
 }
 export interface GetQuestionsByCategoryQueryVariables {
   categoryId: string | undefined;
+  tagFilter: string | undefined;
 }
 
 // GET_ANSWER_BY_QUESTION

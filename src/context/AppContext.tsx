@@ -1,20 +1,6 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { User, Tag } from '../graphql/types';
-
-// Types
-export interface Filters {
-  editMode: boolean;
-  tagFilter: string;
-}
-
-interface AppState {
-  user: User | null;
-  filters: Filters;
-  category: Category | null;
-  question: Question | null;
-  answer: Answer | null;
-  loadingAnswer: boolean;
-}
+import { Answer, AppState, Question, Filters } from '../../types';
 
 interface Category {
   id: string;

@@ -33,8 +33,15 @@ export const TagDisplay = ({ currentState }: TagDisplayProps) => {
   }, [data, selectedTags]);
 
   const handleTagClick = (tag: Tag) => {
+    // Сначала устанавливаем значение фильтра
     dispatch({
       type: 'SET_FILTERS',
+      payload: { tagFilter: tag.name }
+    });
+    
+    // Затем сразу применяем фильтр
+    dispatch({
+      type: 'APPLY_FILTERS',
       payload: { tagFilter: tag.name }
     });
   };
