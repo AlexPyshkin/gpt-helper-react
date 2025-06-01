@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CategoriesList } from "./CategoriesList";
 import { QuestionsList } from "./QuestionsList";
 import { QuestionDetail } from "./QuestionDetail";
@@ -21,7 +20,10 @@ export const Library = () => {
     GetQuestionsByCategoryQuery,
     GetQuestionsByCategoryQueryVariables
   >(GET_QUESTIONS_BY_CATEGORY, {
-    variables: { categoryId: state.category?.id },
+    variables: {
+      categoryId: state.category?.id,
+      tagFilter: state.filters.tagFilter,
+    },
     fetchPolicy: "network-only",
     skip: !state.category?.id,
   });

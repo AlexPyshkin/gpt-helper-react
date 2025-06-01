@@ -1,24 +1,6 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { User, Tag } from '../graphql/types';
-import { Answer, AppState, Question, Filters } from '../../types';
-
-interface Category {
-  id: string;
-  name: string;
-  // Add other category properties as needed
-}
-
-interface Question {
-  id: string;
-  title: string;
-  // Add other question properties as needed
-}
-
-interface Answer {
-  id: string;
-  content: string;
-  // Add other answer properties as needed
-}
+import { User } from '../graphql/types';
+import { Answer, AppState, Question, Filters, Category } from '../types';
 
 // Action types
 type Action =

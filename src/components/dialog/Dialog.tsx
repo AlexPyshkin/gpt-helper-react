@@ -12,20 +12,22 @@ import { VoiceContextTracker } from '../library/VoiceContextTracker';
 import { useAuth } from '../../contexts/AuthContext';
 
 export const Dialog = () => {
+  const { t } = useTranslation();
+  const { user } = useAuth();
   const [state, setState] = useState<AppState>({
     category: null,
     question: null,
     answer: null,
     loadingAnswer: false,
     filters: {
-      editMode: false
-    }
+      editMode: false,
+      tagFilter: ''
+    },
+    user: user
   });
-  const { t } = useTranslation();
-  const { user } = useAuth();
 
   const { loading, error, data } = useQuery(GET_DIALOG_CATEGORY, {
-    variables: { email: user?.email || '' }
+    variables: { email: user?.email ?? '' }
   });
 
   useEffect(() => {
@@ -40,7 +42,10 @@ export const Dialog = () => {
   const { refetch: updateQuestions } = useQuery<GetQuestionsByCategoryQuery, GetQuestionsByCategoryQueryVariables>(
     GET_QUESTIONS_BY_CATEGORY,
     {
-      variables: { categoryId: state.category?.id },
+      variables: {
+        categoryId: state.category?.id,
+        tagFilter: state.filters.tagFilter,
+      },
       fetchPolicy: 'network-only',
       skip: !state.category?.id,
     }
