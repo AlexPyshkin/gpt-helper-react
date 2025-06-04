@@ -41,7 +41,6 @@ export const QuestionsList = ({
   );
 
   const handleQuestionClick = async (question: Question) => {
-    currentState.question = question;
     onSelectQuestion(question);
 
     const response = await fetch(`/graphql`, {

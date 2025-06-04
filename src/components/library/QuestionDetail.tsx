@@ -113,11 +113,11 @@ export const QuestionDetail = ({
 
   const handleNewQuestion = () => {
     setQuestionText("");
-    if (currentState.question) {
-      currentState.question.questionText = "";
-    }
-    currentState.answer = null;
-    refetchQuestions(currentState);
+    refetchQuestions({
+      ...currentState,
+      question: null,
+      answer: null
+    });
   };
 
   const handleRevertChanges = () => {
