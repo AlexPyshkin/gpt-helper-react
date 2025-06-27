@@ -1,7 +1,7 @@
 export const config = {
   api: {
     graphql: '/graphql',
-    transcribe: 'http://localhost:9099/transcribe'
+    transcribe: 'https://whisper-api.alexpyshkin.top/transcribe'
   },
   transcribe: {
     defaultParams: {
