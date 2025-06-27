@@ -37,7 +37,10 @@
     "tagFilter": "Tag Filter",
     "enterTag": "Enter tag name",
     "clear": "Clear",
-    "apply": "Apply"
+    "apply": "Apply",
+    "newCategory": "New Category",
+    "add": "Add",
+    "enterText": "Enter category name"
   },
   "dialog": {
     "categoryNotFound": "Category not found"
