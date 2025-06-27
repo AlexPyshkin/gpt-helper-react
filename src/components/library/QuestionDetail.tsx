@@ -207,6 +207,7 @@ export const QuestionDetail = ({
         }
         value={questionText}
         onChange={handleInputChange}
+        disabled={!currentState.category}
         style={{
           width: "96%",
           border: "1px solid #ccc",

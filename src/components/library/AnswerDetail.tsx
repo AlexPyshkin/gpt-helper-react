@@ -101,6 +101,7 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
               minRows={styles.textarea[variant].minRows}
               value={answerText}
               onChange={handleInputChange}
+              disabled={!currentState.category}
               style={{
                 width: '100%',
                 border: '1px solid #ccc',
@@ -125,6 +126,7 @@ export const AnswerDetail = ({ currentState, variant = 'library' }: AnswerDetail
                   color="primary"
                 />
               }
+              disabled={!currentState.category}
               label={t('library.editMode')}
               sx={{ marginRight: 2, alignItems: "center"}}
             />
