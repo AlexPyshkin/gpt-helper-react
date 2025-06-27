@@ -21,6 +21,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import LanguageIcon from "@mui/icons-material/Language";
 import ClearIcon from "@mui/icons-material/Clear";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import Collapse from '@mui/material/Collapse';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useAppContext } from "../../context/AppContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -31,6 +34,8 @@ export const AppDrawer = () => {
   const { isAuthenticated, user } = useAuth();
   const { language, toggleLanguage } = useLanguage();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   const { t } = useTranslation();
 
   const handleEditModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +61,11 @@ export const AppDrawer = () => {
       type: 'SET_FILTERS', 
       payload: { tagFilter: event.target.value } 
     });
+  };
+
+  const handleSave = () => {
+    // For now, just log the value
+    console.log('Saved:', { inputValue });
   };
 
   if (!isAuthenticated) {
@@ -173,6 +183,55 @@ export const AppDrawer = () => {
               </Button>
             </Box>
           </Box>
+        </Box>
+      )}
+      {/* Collapsible block at the bottom */}
+      {drawerOpen && (
+        <Box sx={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          borderTop: '1px solid #eee',
+          background: 'background.paper',
+          zIndex: 1,
+        }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              px: 2,
+              py: 1,
+              userSelect: 'none',
+            }}
+            onClick={() => setCollapsibleOpen((prev) => !prev)}
+          >
+            <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+              {t('common.newCategory') || 'Новая категория'}
+            </Typography>
+            {collapsibleOpen ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
+          </Box>
+          <Collapse in={collapsibleOpen} timeout="auto" unmountOnExit>
+            <Box sx={{ px: 2, py: 1 }}>
+              <TextField
+                fullWidth
+                size="small"
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                placeholder={t('common.enterText') || 'Enter text'}
+                sx={{ mb: 1 }}
+              />
+              <Button
+                variant="contained"
+                size="small"
+                fullWidth
+                onClick={handleSave}
+              >
+                {t('common.add') || 'Добавить'}
+              </Button>
+            </Box>
+          </Collapse>
         </Box>
       )}
     </Drawer>
