@@ -64,6 +64,8 @@
     "errorSavingAnswer": "Ошибка сохранения ответа:",
     "editMode": "Режим редактирования",
     "selectCategoryPrompt": "Пожалуйста, выберите категорию для отображения вопросов.",
-    "noRecordedMessages": "Нет записанных сообщений"
+    "noRecordedMessages": "Нет записанных сообщений",
+    "createCategory": "Создать категорию",
+    "categoryNamePlaceholder": "Введите название категории"
   }
 } 

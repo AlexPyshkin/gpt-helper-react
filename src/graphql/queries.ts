@@ -79,6 +79,17 @@ export const CREATE_QUESTION = gql`
   }
 `;
 
+export const CREATE_CATEGORY = gql`
+  mutation CreateCategory($categoryText: String!, $parentId: ID) {
+    createQuestion(categoryText: $categoryText, parentId: $parentId) {
+      category {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const UPDATE_QUESTION = gql`
   mutation UpdateQuestion($id: ID!, $questionText: String!, $questionType: String) {
     updateQuestion(id: $id, questionText: $questionText, questionType: $questionType) {

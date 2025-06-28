@@ -64,6 +64,8 @@
     "errorSavingAnswer": "Error saving answer:",
     "editMode": "Edit mode",
     "selectCategoryPrompt": "Please select a category to display questions.",
-    "noRecordedMessages": "No recorded messages"
+    "noRecordedMessages": "No recorded messages",
+    "createCategory": "Create Category",
+    "categoryNamePlaceholder": "Enter category name"
   }
 } 
