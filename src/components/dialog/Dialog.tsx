@@ -27,7 +27,7 @@ export const Dialog = () => {
   });
 
   const { loading, error, data } = useQuery(GET_DIALOG_CATEGORY, {
-    variables: { email: user?.email ?? '' }
+    variables: { userId: user?.id || null }
   });
 
   useEffect(() => {

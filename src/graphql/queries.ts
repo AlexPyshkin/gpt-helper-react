@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_LIBRARY_CATEGORIES = gql`
-  query GetLibraryCategories($email: String!) {
-    categories: libraryCategories(email: $email) {
+  query GetLibraryCategories($userId: ID!) {
+    categories: libraryCategories(userId: $userId) {
       id
       name
       parentId
@@ -26,8 +26,8 @@ export const GET_TEXT_CONTEXT = gql`
 `;
 
 export const GET_DIALOG_CATEGORY = gql`
-  query GetDialogCategories($email: String!) {
-    category: dialogCategory(email: $email) {
+  query GetDialogCategories($userId: ID!) {
+    category: dialogCategory(userId: $userId) {
       id
       name
     }
@@ -80,12 +80,11 @@ export const CREATE_QUESTION = gql`
 `;
 
 export const CREATE_CATEGORY = gql`
-  mutation CreateCategory($categoryText: String!, $parentId: ID) {
-    createQuestion(categoryText: $categoryText, parentId: $parentId) {
-      category {
+  mutation CreateCategory($categoryText: String!, $userId: ID!, $parentId: ID) {
+    createCategory(categoryText: $categoryText, userId: $userId, parentId: $parentId) {
         id
         name
-      }
+        parentId
     }
   }
 `;

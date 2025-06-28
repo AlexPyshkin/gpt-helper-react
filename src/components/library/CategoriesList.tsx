@@ -122,26 +122,35 @@ const CategoryTreeItem = ({category, level = 0, onSelectCategory, currentState}:
 
 export const CategoriesList = ({onSelectCategory, currentState}: CategoriesListProps) => {
     const { user } = useAuth();
-    const {loading, error, data} = useQuery(GET_LIBRARY_CATEGORIES, {
-        variables: { email: user?.email || '' }
+    const {loading, error, data, refetch} = useQuery(GET_LIBRARY_CATEGORIES, {
+        variables: { userId: user?.id || null }
     });
     const { t } = useTranslation();
     
     const [newCategoryName, setNewCategoryName] = useState('');
     const [createCategory, { loading: creatingCategory }] = useMutation(CREATE_CATEGORY, {
-        refetchQueries: [{ query: GET_LIBRARY_CATEGORIES, variables: { email: user?.email || '' } }]
+        refetchQueries: [{ query: GET_LIBRARY_CATEGORIES, variables: { userId: user?.id || null } }],
+        onCompleted: () => {
+            // Дополнительное обновление после успешного создания
+            refetch();
+        }
     });
 
     const handleCreateCategory = async () => {
         if (!newCategoryName.trim()) return;
         try {
-            await createCategory({
+            const result = await createCategory({
                 variables: {
                     categoryText: newCategoryName.trim(),
+                    userId: user?.id || null,
                     parentId: currentState.category?.id || null
                 }
             });
+            console.log('Created category:', result);
             setNewCategoryName('');
+            
+            // Дополнительное обновление списка
+            await refetch();
         } catch (err) {
             console.error('Error creating category:', err);
         }
